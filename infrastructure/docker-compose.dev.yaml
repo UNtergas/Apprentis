@@ -1,0 +1,76 @@
+
+
+services:
+  backend:
+    container_name: project-option-backend
+    build:
+      context: ..
+      dockerfile: packages/backend/Dockerfile
+    image: project-option-backend:dev
+    user: "${DOCKER_UID}:${DOCKER_UID}"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ..:/app
+    depends_on:
+      - db
+
+    environment:
+      POSTGRES_DB: app-mono
+      POSTGRES_USER: mono
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: db
+    command: >
+      sh -c "
+             pnpm install &&
+             pnpm dev:back"
+
+  frontend:
+    container_name: project-option-frontend
+    build:
+      context: ..
+      dockerfile: packages/frontend/Dockerfile
+    image: project-option-frontend:dev
+    user: "${DOCKER_UID}:${DOCKER_UID}"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ..:/app
+    depends_on:
+      - backend
+    environment:
+      VITE_BACKEND_URL: http://localhost:8080
+    command: >
+      sh -c "
+             pnpm install &&
+             pnpm dev:front"
+
+  db:
+    image: postgres:15
+    container_name: project-option-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: app-mono
+      POSTGRES_USER: mono
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+      - frontend
+    hostname: appdev.local
+
+volumes:
+  postgres-data:
+    name: project-option-postgres-data
