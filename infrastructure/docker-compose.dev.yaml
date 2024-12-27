@@ -7,7 +7,7 @@ services:
       context: ..
       dockerfile: packages/backend/Dockerfile
     image: project-option-backend:dev
-    user: "${DOCKER_UID}:${DOCKER_UID}"
+    user: "${DOCKER_UID}:${DOCKER_GID}"
     ports:
       - "8080:8080"
     volumes:
@@ -22,8 +22,9 @@ services:
       POSTGRES_HOST: db
     command: >
       sh -c "
-             pnpm install &&
-             pnpm dev:back"
+              pnpm build:shared &&
+              pnpm install &&
+              pnpm dev:back"
 
   frontend:
     container_name: project-option-frontend
@@ -31,7 +32,7 @@ services:
       context: ..
       dockerfile: packages/frontend/Dockerfile
     image: project-option-frontend:dev
-    user: "${DOCKER_UID}:${DOCKER_UID}"
+    user: "${DOCKER_UID}:${DOCKER_GID}"
     ports:
       - "3000:3000"
     volumes:

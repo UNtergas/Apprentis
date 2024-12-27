@@ -54,6 +54,8 @@ clean_app(){
     if [[ "$proceed" =~ ^[yY]$ ]]; then
       docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1 --volumes
       sudo rm -rf node_modules packages/*/node_modules packages/*/dist
+      sudo rm -rf packages/backend/prisma/migrations
+      sudo rm -rf packages/frontend/.next
       sudo rm -rf pnpm-lock.yaml .pnpm-store
       sudo docker volume remove postgres_data
       echo "Project is deep cleaned !"
