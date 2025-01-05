@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 packages/*/node_modules
+packages/frontend/.next
 .pnpm-store
 dist
 dist-ssr
