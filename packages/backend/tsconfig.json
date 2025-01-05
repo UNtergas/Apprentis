@@ -17,8 +17,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "tsBuildInfoFile": "./dist/tsbuildinfo.json",
     "paths": {
-      "@app/*": ["node_modules/@app/*"]
+      "#/*": ["./src/*"],
     }
   }
 }
