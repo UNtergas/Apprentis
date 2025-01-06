@@ -11,7 +11,7 @@ import { Permissions } from "#/auth/decorators/permissions.decorator";
 import { PermissionGuard } from "#/guard/permission.guard";
 import { SecurityScope } from "#/auth/auth.scope";
 import { Request } from "express";
-import { ResponseObject, UserDTO } from "../../../shared/back";
+import { ResponseObject, UserDTO } from "@shared/backend";
 import { ApiBody } from "@nestjs/swagger";
 
 @Controller("api/user")

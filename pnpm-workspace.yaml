@@ -1,6 +1,5 @@
 packages:
   - 'packages/backend'
   - 'packages/frontend'
-  - 'packages/shared/'
   - 'packages/shared/back'
   - 'packages/shared/front'

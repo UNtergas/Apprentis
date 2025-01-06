@@ -1,4 +1,4 @@
-import { Role, ROLE } from "../../../shared/back";
+import { Role, ROLE } from "@shared/backend";
 
 export enum SecurityScope {
   USER_READ = "user.read",

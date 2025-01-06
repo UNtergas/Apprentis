@@ -1,6 +1,6 @@
 import { InterfaceRepository } from "#/interfaces/Interface.repository";
 import PRISMA from "../../prisma";
-import { UserDTO, ROLE, RegisterDTO } from "../../../shared/back";
+import { UserDTO, ROLE, RegisterDTO } from "@shared/backend";
 import { Injectable, NotImplementedException } from "@nestjs/common";
 
 @Injectable()
