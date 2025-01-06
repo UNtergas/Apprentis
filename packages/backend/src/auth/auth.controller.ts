@@ -5,9 +5,12 @@ import {
   ResponseObject,
   SignInResponse,
   RegisterDTO,
-} from "@app/shared";
-import { RestSignInDTO as SignInDTO } from "#/dto/auth.dto";
+  SignInDTO,
+} from "@shared/backend";
+
 import { ApiBody } from "@nestjs/swagger";
+
+console.log(UserDTO);
 
 @Controller("api/auth")
 export class AuthController {

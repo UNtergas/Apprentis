@@ -131,9 +131,10 @@ clean_app(){
     if [[ "$proceed" =~ ^[yY]$ ]]; then
       docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1 --volumes --remove-orphans
 
-      sudo rm -rf node_modules packages/*/node_modules packages/*/dist
+      sudo rm -rf node_modules packages/*/node_modules  packages/shared/*/node_modules
+      sudo rm -rf packages/*/dist packages/shared/*/dist
       sudo rm -rf packages/*/buildCache
-      sudo rm -rf packages/frontend/.next
+      sudo rm -rf packages/front/.next
       sudo rm -rf pnpm-lock.yaml .pnpm-store
 #      sudo docker volume remove postgres_data
       echo "Project is deep cleaned !"
@@ -179,6 +180,9 @@ up_dev(){
   docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app -f nginx -f db
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
+down(){
+  docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
+}
 
 run_backend(){
   export DOCKER_DEV_ENTRY_CMD="pnpm run build:shared && pnpm i && pnpm run dev:back"
@@ -216,6 +220,10 @@ elif [[ "$1" = "backend" ]]; then
 
 elif [[ "$1" = "frontend" ]]; then
   run_frontend
+  exit 0
+
+elif [[ "$1" = "down" ]]; then
+  down
   exit 0
 
 elif [[ "$1" = "up" ]]; then

@@ -10,7 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@app/shared": "workspace:*",
+    "@shared/frontend": "workspace:*",
     "class-validator": "^0.14.1",
     "next": "15.0.1",
     "react": "19.0.0-rc-69d4b800-20241021",

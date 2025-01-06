@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import ApiClient  from '../api/ApiClient'; // Adjust the import path
-import { SignInResponse, UserDTO , APIException } from '@app/shared'; // Adjust the import path // Adjust the import path
+import { SignInResponse, UserDTO , APIException } from '../../../shared/front'; // Adjust the import path // Adjust the import path
 
 const AuthTestPage: React.FC = () => {
   const [name, setName] = useState('');

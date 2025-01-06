@@ -1,4 +1,4 @@
-import { APIException, ResponseObject, SignInResponse, UserDTO } from '@app/shared';
+import { APIException, ResponseObject, SignInResponse, UserDTO } from '../../../shared/front';
 
 
 class ApiClient{

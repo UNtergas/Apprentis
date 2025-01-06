@@ -5,8 +5,8 @@ import {
 } from "@nestjs/common";
 import { UserRepository } from "#/user/User.repository";
 import { JwtService } from "@nestjs/jwt";
-import { UserDTO } from "@app/shared";
-import { SignInDTO, SignInResponse, RegisterDTO } from "@app/shared";
+import { UserDTO } from "../../../shared/back";
+import { SignInDTO, SignInResponse, RegisterDTO } from "../../../shared/back";
 
 @Injectable()
 export class AuthService {

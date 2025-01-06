@@ -1,17 +1,14 @@
 {
-    "name": "@app/shared",
+    "name": "shared",
     "private": true,
     "version": "1.0.0",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "files": [
-        "dist"
-    ],
+
+
     "scripts": {
         "preinstall": "npx only-allow pnpm",
-        "build": " rm -rf dist && nest build",
-        "build:backend": "rm -rf dist && nest build",
-        "build:frontend": "tsc --outDir distFront --declaration --emitDeclarationOnly",
+        "build": "pnpm run build:backend && pnpm run build:frontend",
+        "build:backend": "pnpm --filter @shared/backend run build",
+        "build:frontend": "pnpm --filter @shared/frontend run build",
         "compile": "tsc --noEmit"
     },
     "dependencies": {
