@@ -162,7 +162,7 @@ clean_dev(){
   IFS=',' read -r -a images_to_prune <<< "$DOCKER_IMAGE"
   prune_docker_images "${images_to_prune[@]}"
 
-  export DOCKER_DEV_ENTRY_CMD="pnpm run build:shared && pnpm i && pnpm run clean:back &&pnpm run dev:all"
+  export DOCKER_DEV_ENTRY_CMD="pnpm i && pnpm run build:shared && pnpm i && pnpm run clean:back &&pnpm run dev:all"
   mkdir -p node_modules
 
   # Call the function
