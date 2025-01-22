@@ -1,4 +1,11 @@
-import { Controller, HttpCode, Post, HttpStatus, Body } from "@nestjs/common";
+import {
+  Controller,
+  HttpCode,
+  Post,
+  HttpStatus,
+  Body,
+  Res,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {
   UserDTO,
@@ -9,8 +16,9 @@ import {
 } from "@shared/backend";
 
 import { ApiBody } from "@nestjs/swagger";
+import { Response } from "express";
+import { jwtConfig } from "#/config/jwtConfig";
 
-console.log(UserDTO);
 
 @Controller("api/auth")
 export class AuthController {
@@ -21,8 +29,13 @@ export class AuthController {
   @ApiBody({ type: SignInDTO })
   async signIn(
     @Body() body: SignInDTO,
+    @Res() res: Response,
   ): Promise<ResponseObject<"signIn", SignInResponse>> {
     const signIn = await this.authService.signIn(body);
+    res.cookie("jwt", signIn.token, {
+      httpOnly: true,
+      maxAge: jwtConfig.EXPIRE,
+    });
     return { signIn };
   }
 

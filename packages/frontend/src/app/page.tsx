@@ -1,9 +1,8 @@
-import AuthTestPage from '@/components/AuthTestPage';
 
 export default function Home(){
   return(
     <div>
-      <AuthTestPage/>
+      <h1>Welcome to the frontend</h1>
     </div>
   )
 }

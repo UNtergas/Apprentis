@@ -22,25 +22,26 @@ export class PermissionGuard implements CanActivate {
       PERMISSIONS_KEY,
       context.getHandler(),
     );
+    if (!permissions) {
+      return true;
+    }
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers.authorization;
+    const token = request.cookies["jwt"];
+    // const authHeader = request.headers.authorization;
 
-    if (!authHeader) {
-      throw new UnauthorizedException("Authorization header is missing");
-    }
+    // if (!authHeader) {
+    //   throw new UnauthorizedException("Authorization header is missing");
+    // }
 
-    const token = request.headers.authorization.split(" ")[1];
-    if (!token) {
-      throw new UnauthorizedException("No token provided");
-    }
+    // const token = request.headers.authorization.split(" ")[1];
+    // if (!token) {
+    //   throw new UnauthorizedException("No token provided");
+    // }
     try {
       const payload = this.jwtService.verify(token);
       request.securityContext = {
         user: { id: payload.sub, email: payload.email, role: payload.role },
       };
-      if (!permissions) {
-        return true;
-      }
       const scopes = getScopesBasedOnUserRole(payload.role);
       const hasPermission = permissions.every((permission) =>
         scopes.has(permission),

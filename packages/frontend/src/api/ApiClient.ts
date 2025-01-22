@@ -1,4 +1,4 @@
-import { APIException, ResponseObject, SignInResponse, UserDTO } from '../../../shared/front';
+import { APIException, ResponseObject, SignInResponse, UserDTO } from '@shared/frontend';
 
 
 class ApiClient{
@@ -20,7 +20,7 @@ class ApiClient{
       method,
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': token ? token : '',
+        'Authorization': token ? `Bearer ${token}` : '',
       }
     }
     if (method === 'POST' || method === 'PUT' || method === 'PATCH') {
@@ -54,8 +54,8 @@ class ApiClient{
   }
 
   static User = {
-    getMe: async (token: string): Promise<UserDTO> => {
-      const res = await ApiClient.sendRequest<"user", UserDTO>('GET', '/api/user/me', undefined, token);
+    getMe: async (): Promise<UserDTO> => {
+      const res = await ApiClient.sendRequest<"user", UserDTO>('GET', '/api/user/me', undefined);
       return res.user;
     }
   }

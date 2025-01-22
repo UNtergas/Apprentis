@@ -7,6 +7,7 @@ import { UserRepository } from "#/user/User.repository";
 import { JwtService } from "@nestjs/jwt";
 import { UserDTO } from "@shared/backend";
 import { SignInDTO, SignInResponse, RegisterDTO } from "@shared/backend";
+import { Response } from "express";
 
 @Injectable()
 export class AuthService {
@@ -37,9 +38,9 @@ export class AuthService {
     }
 
     const payload = { email: user.email, sub: user.id, role: user.role };
-
+    const token = this.jwtService.sign(payload);
     return {
-      token: this.jwtService.sign(payload),
+      token: token,
       email: user.email,
       id: user.id,
     };
