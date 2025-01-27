@@ -17,8 +17,7 @@ import {
 
 import { ApiBody } from "@nestjs/swagger";
 import { Response } from "express";
-import { jwtConfig } from "#/config/jwtConfig";
-
+import { CONFIG } from "#/env.config";
 
 @Controller("api/auth")
 export class AuthController {
@@ -29,13 +28,14 @@ export class AuthController {
   @ApiBody({ type: SignInDTO })
   async signIn(
     @Body() body: SignInDTO,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<ResponseObject<"signIn", SignInResponse>> {
     const signIn = await this.authService.signIn(body);
     res.cookie("jwt", signIn.token, {
       httpOnly: true,
-      maxAge: jwtConfig.EXPIRE,
+      maxAge: CONFIG.COOKIE_EXPIRE,
     });
+    console.log(signIn);
     return { signIn };
   }
 
@@ -47,5 +47,14 @@ export class AuthController {
   ): Promise<ResponseObject<"signUp", UserDTO>> {
     const signUp = await this.authService.signUp(body);
     return { signUp };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("logout")
+  async signOut(
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ResponseObject<"signOut", string>> {
+    res.clearCookie("jwt");
+    return { signOut: "Signout Successfully" };
   }
 }

@@ -1,6 +1,7 @@
 import { APIException, ResponseObject, SignInResponse, UserDTO } from '@shared/frontend';
 
 
+
 class ApiClient{
   /**
    * Sends a request to the server
@@ -13,18 +14,24 @@ class ApiClient{
   private static async sendRequest<K extends string,V>(
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
     endpoint: string,
-    body?: object,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    body?: any,
     token?: string
   ): Promise<ResponseObject<K, V>> {
-    const options: RequestInit = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const options: any = {
       method,
       headers: {
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
         'Authorization': token ? `Bearer ${token}` : '',
       }
     }
-    if (method === 'POST' || method === 'PUT' || method === 'PATCH') {
-      options.body = JSON.stringify(body);
+    // Only set Content-Type if the body is not FormData
+    if (body && !(body instanceof FormData) ) {
+      options.headers['Content-Type'] = 'application/json';
+      options.body = JSON.stringify(body); // Serialize JSON payload
+    } else if (body instanceof FormData) {
+        options.body = body; // Let the browser handle the Content-Type
     }
     const response = await fetch(endpoint, options);
     if (!response.ok) {
@@ -32,7 +39,7 @@ class ApiClient{
       const errorData = await response.json(); // Optionally parse the response body
 
       throw new APIException(
-        response.status,
+        errorData.statusCode,
         errorData.code,
         errorData.message,
       );
@@ -51,6 +58,10 @@ class ApiClient{
       const res = await ApiClient.sendRequest<"signUp", UserDTO>('POST', '/api/auth/register', body);
       return res.signUp;
     },
+    signOut: async (): Promise<string> => {
+      const res = await ApiClient.sendRequest<"signOut",string>('POST', '/api/auth/logout');
+      return res.signOut;
+    }
   }
 
   static User = {

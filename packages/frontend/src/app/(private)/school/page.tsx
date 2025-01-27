@@ -2,7 +2,7 @@
 export default function PrivatePage(){
     return(
         <div>
-        <h1>Welcome to the private page</h1>
+            <h1>Welcome to School page</h1>
         </div>
     )
 }

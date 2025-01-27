@@ -1,70 +1,69 @@
-// 'use client';
+'use client';
 
-// import { SignInResponse, UserDTO } from "@shared/frontend";
-// import { createContext, useContext, useEffect, useState } from "react";
-// import ApiClient from "./api/ApiClient";
+import { SignInResponse, UserDTO } from "@shared/frontend";
+import { createContext, useContext, useEffect, useState } from "react";
+import ApiClient from "./api/ApiClient";
+import Cookie from 'js-cookie';
 
-// const TOKEN_STORAGE= 'jwt_token';
+interface AuthContextType {
+    authInit: boolean;
+    signIn: (email: string, password: string) => Promise<SignInResponse>;
+    signOut: () => void;
+    currentUser: UserDTO | null;
+}
 
+const AuthContext = createContext<AuthContextType | null>(null)
 
-// interface AuthContextType {
-//     token : string | null;
-//     tokenInit: boolean;
-//     signIn: (email: string, password: string) => Promise<SignInResponse>;
-//     signOut: () => void;
-//     currentUser: UserDTO | null;
-// }
+export const AuthProvider = ({children} : {children: React.ReactNode}) => {
+    const [authInit, setAuthInit] = useState<boolean>(false);
+    const [currentUser, setCurrentUser] = useState<UserDTO | null>(null);
 
-// const AuthContext = createContext<AuthContextType | null>(null)
+    const signIn = async (email: string, password: string):Promise<SignInResponse> => {
+        try {
+            const res = await ApiClient.Auth.signIn(email, password);
+            await fetchCurrentUser();
+            return res;
+        }catch(e){
+            throw e;
+        }
+    }
 
-// export const AuthProvider = ({children} : {children: React.ReactNode}) => {
-//     const [token, setToken] = useState<string | null>(localStorage.getItem(TOKEN_STORAGE));
-//     const [tokenInit, setTokenInit] = useState<boolean>(false);
-//     const [currentUser, setCurrentUser] = useState<UserDTO | null>(null);
+    const fetchCurrentUser = async () => {
+        try {
+            const res = await ApiClient.User.getMe();
+            setCurrentUser(res);
+        }catch(e){
+            throw e;
+        }
+    }
 
-//     const signIn = async (email: string, password: string):Promise<SignInResponse> => {
-//         try {
-//             const res = await ApiClient.Auth.signIn(email, password);
-//             localStorage.setItem(TOKEN_STORAGE, res.token);
-//             setToken(res.token);
-//             await fetchCurrentUser(res.token);
-//             return res;
-//         }catch(e){
-//             throw e;
-//         }
-//     }
+    const signOut = async ()=>{
+        await ApiClient.Auth.signOut();
+        setCurrentUser(null);
+    }
 
-//     const fetchCurrentUser = async (token:string) => {
-//         try {
-//             const res = await ApiClient.User.getMe(token);
-//             setCurrentUser(res);
-//         }catch(e){
-//             throw e;
-//         }
-//     }
+    useEffect(() => {
+        const initAuthContext = async () => {
+            try {
+                if(Cookie.get('token')){
+                    await fetchCurrentUser();
+                }
+            } catch (e) {
+                console.error("Failed to fetch user during initialization:", e);
+                throw e;
+            } finally {
+                setAuthInit(true);
+            }
+        };
 
-//     const signOut = ()=>{
-//         localStorage.removeItem(TOKEN_STORAGE);
-//         setToken(null);
-//         setCurrentUser(null);
-//     }
+        initAuthContext();
+    }, []);
+    return(
+        <AuthContext.Provider value={{currentUser, authInit, signIn, signOut}}>{children}</AuthContext.Provider>   
+    )
+}
 
-//     useEffect(()=>{
-//         const initAuthContext = async () => {
-//             if(token){
-//                 localStorage.setItem(TOKEN_STORAGE, token); 
-//                 await fetchCurrentUser(token);
-//             }
-//             setTokenInit(true);
-//         }
-//         initAuthContext();
-//     },[token])
-//     return(
-//         <AuthContext.Provider value={{token, currentUser, tokenInit, signIn, signOut}}>{children}</AuthContext.Provider>   
-//     )
-// }
-
-// export const useAuth = () =>{
-//     const auth = useContext(AuthContext);
-//     return auth
-// }
+export const useAuth = () =>{
+    const auth = useContext(AuthContext);
+    return auth
+}

@@ -168,8 +168,22 @@ clean_dev(){
   # Call the function
   docker compose -f "${DOCKER_COMPOSE_DEV}" build --no-cache
   docker compose -f "${DOCKER_COMPOSE_DEV}" up --remove-orphans -d
-  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app -f nginx -f db
+  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app 
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
+}
+
+check_requirements(){
+  if [[ ! -f "${ROOT_PROJECT}/.env" ]]; then
+    echo "Error: .env file not found in the root project directory."
+    exit 1
+  fi
+
+  echo "Requirements check passed successfully!"
+}
+
+sym_env(){
+  ln -sf "${ROOT_PROJECT}"/.env "${ROOT_PROJECT}"/packages/backend/.env
+  ln -sf "${ROOT_PROJECT}"/.env "${ROOT_PROJECT}"/packages/frontend/.env
 }
 
 
@@ -177,7 +191,8 @@ up_dev(){
   export DOCKER_DEV_ENTRY_CMD="pnpm run build:shared && pnpm i && pnpm run dev:all"
   mkdir -p node_modules
   docker compose -f "${DOCKER_COMPOSE_DEV}" up --remove-orphans -d
-  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app -f nginx -f db
+  # docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app -f nginx -f db
+  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app 
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
 down(){
@@ -188,7 +203,7 @@ run_backend(){
   export DOCKER_DEV_ENTRY_CMD="pnpm run build:shared && pnpm i && pnpm run dev:back"
   mkdir -p node_modules
   docker compose -f "${DOCKER_COMPOSE_DEV}" up --remove-orphans -d
-  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app -f nginx
+  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app 
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
 
@@ -196,7 +211,7 @@ run_frontend(){
   export DOCKER_DEV_ENTRY_CMD="pnpm run build:shared && pnpm i && pnpm run dev:front"
   mkdir -p node_modules
   docker compose -f "${DOCKER_COMPOSE_DEV}" up --remove-orphans -d
-  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app -f nginx
+  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app 
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
 
@@ -211,15 +226,36 @@ elif [[ "$1" = "clean" ]]; then
   exit 0
 
 elif [[ "$1" = "dev" ]]; then
-  clean_dev
+  check_requirements
+  if [[ $? -eq 0 ]] then
+    sym_env
+    clean_dev
+  else
+    echo "Requirements check failed!"
+    exit 1
+  fi
   exit 0
 
 elif [[ "$1" = "backend" ]]; then
-  run_backend
+  check_requirements
+  if [[ $? -eq 0 ]] then
+    sym_env
+    run_backend
+  else
+    echo "Requirements check failed!"
+    exit 1
+  fi
   exit 0
 
 elif [[ "$1" = "frontend" ]]; then
-  run_frontend
+  check_requirements
+  if [[ $? -eq 0 ]] then
+    sym_env
+    run_frontend
+  else
+    echo "Requirements check failed!"
+    exit 1
+  fi
   exit 0
 
 elif [[ "$1" = "down" ]]; then
@@ -227,8 +263,16 @@ elif [[ "$1" = "down" ]]; then
   exit 0
 
 elif [[ "$1" = "up" ]]; then
-  up_dev
+  check_requirements
+  if [[ $? -eq 0 ]] then
+    sym_env
+    up_dev
+  else
+    echo "Requirements check failed!"
+    exit 1
+  fi
   exit 0
+
 elif [[ "$1" = "cert" ]]; then
   create_tls_certificates
 else

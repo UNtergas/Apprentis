@@ -7,7 +7,6 @@ import { UserRepository } from "#/user/User.repository";
 import { JwtService } from "@nestjs/jwt";
 import { UserDTO } from "@shared/backend";
 import { SignInDTO, SignInResponse, RegisterDTO } from "@shared/backend";
-import { Response } from "express";
 
 @Injectable()
 export class AuthService {
