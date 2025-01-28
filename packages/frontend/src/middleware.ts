@@ -23,11 +23,11 @@ export async function middleware(req: NextRequest) {
     const userRole = payload["role"] as Role;
 
     // Role-based redirection logic
-    if (userRole === ROLE.STUDENT && pathname !== "/user") {
+    if (userRole === ROLE.STUDENT && !pathname.startsWith("/user")) {
       return NextResponse.redirect(new URL("/user", origin));
-    } else if (userRole === ROLE.TUTOR && pathname !== "/school") {
+    } else if (userRole === ROLE.TUTOR && !pathname.startsWith("/school")) {
       return NextResponse.redirect(new URL("/school", origin));
-    } else if (userRole === ROLE.ADMIN && pathname !== "/admin") {
+    } else if (userRole === ROLE.ADMIN && !pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/admin", origin));
     }
 

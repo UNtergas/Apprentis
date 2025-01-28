@@ -2,7 +2,7 @@ import { ApiProperty , ApiBody } from '@nestjs/swagger';
 
 export const ROLE ={
   STUDENT: 'STUDENT',
-  USER: 'USER',
+  COMPANY: 'COMPANY',
   ADMIN: 'ADMIN',
   TUTOR: 'TUTOR',
 } as const

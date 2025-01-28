@@ -11,10 +11,12 @@
     "clean": "rm -rf dist",
     "start": "pnpm run clean && pnpm run database && nest start",
     "start:dev": "pnpm run clean &&  pnpm run database && nest start --watch",
-    "database": "pnpm run prisma:migrate && pnpm run prisma:generate",
+    "database": "pnpm run prisma:force_push && pnpm run prisma:generate",
     "prisma:migrate": "prisma migrate dev --name create_tables",
     "prisma:generate": "prisma generate",
     "prisma:deploy": "prisma migrate deploy",
+    "prisma:force_push": "prisma db push --accept-data-loss",
+
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
