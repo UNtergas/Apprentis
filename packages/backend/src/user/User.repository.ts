@@ -1,45 +1,45 @@
-import { InterfaceRepository } from "#/interfaces/Interface.repository";
 import PRISMA from "../../prisma";
-import { UserDTO, ROLE, RegisterDTO } from "@shared/backend";
-import { Injectable, NotImplementedException } from "@nestjs/common";
+import { User, ROLE, RegisterDTO } from "@shared/backend";
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class UserRepository implements InterfaceRepository<UserDTO> {
-  count(): Promise<number> {
+export class UserRepository {
+  async count(): Promise<number> {
     return PRISMA.user.count();
   }
-  findAll(): Promise<UserDTO[]> {
+
+  async findAll(): Promise<User[]> {
     return PRISMA.user.findMany();
   }
-  findOneByEmail(email: string): Promise<UserDTO> {
+  async findOneByEmail(email: string): Promise<User> {
     return PRISMA.user.findUnique({
       where: {
         email: email,
       },
     });
   }
-  findOneById(id: number): Promise<UserDTO> {
+  async findOneById(id: number): Promise<User> {
     return PRISMA.user.findUnique({
       where: {
         id: id,
       },
     });
   }
-  createOne(CreateData: RegisterDTO): Promise<UserDTO> {
+  async createOne(CreateData: RegisterDTO): Promise<User> {
     return PRISMA.user.create({
       data: {
         ...CreateData,
-        role: ROLE.STUDENT, // Set default role here// Set default name here
+        role: ROLE.STUDENT,
       },
     });
   }
-  updateOne(id: number, UpdateData: Partial<UserDTO>): Promise<UserDTO> {
-    throw new NotImplementedException("Method not implemented.");
-  }
-  deleteOne(id: number): Promise<UserDTO> {
-    throw new NotImplementedException("Method not implemented.");
-  }
-  deleteMany(): Promise<void> {
-    throw new NotImplementedException("Method not implemented.");
-  }
+  // updateOne(id: number, UpdateData: Partial<User>): Promise<User> {
+  //   throw new NotImplementedException("Method not implemented.");
+  // }
+  // deleteOne(id: number): Promise<User> {
+  //   throw new NotImplementedException("Method not implemented.");
+  // }
+  // deleteMany(): Promise<void> {
+  //   throw new NotImplementedException("Method not implemented.");
+  // }
 }

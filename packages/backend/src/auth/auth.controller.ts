@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {
-  UserDTO,
+  User,
   ResponseObject,
   SignInResponse,
   RegisterDTO,
@@ -44,7 +44,7 @@ export class AuthController {
   @ApiBody({ type: RegisterDTO })
   async signUp(
     @Body() body: RegisterDTO,
-  ): Promise<ResponseObject<"signUp", UserDTO>> {
+  ): Promise<ResponseObject<"signUp", User>> {
     const signUp = await this.authService.signUp(body);
     return { signUp };
   }

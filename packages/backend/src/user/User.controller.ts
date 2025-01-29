@@ -11,7 +11,7 @@ import { Permissions } from "#/auth/decorators/permissions.decorator";
 import { PermissionGuard } from "#/guard/permission.guard";
 import { SecurityScope } from "#/auth/auth.scope";
 import { Request } from "express";
-import { ResponseObject, UserDTO } from "@shared/backend";
+import { ResponseObject, User } from "@shared/backend";
 import { ApiBody } from "@nestjs/swagger";
 
 @Controller("api/user")
@@ -22,10 +22,8 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Get("me")
   @Permissions(SecurityScope.USER_CURRENT_READ)
-  @ApiBody({ type: UserDTO })
-  async getMe(
-    @Req() request: Request,
-  ): Promise<ResponseObject<"user", UserDTO>> {
+  @ApiBody({ type: User })
+  async getMe(@Req() request: Request): Promise<ResponseObject<"user", User>> {
     const user = await this.userRepository.findOneById(
       request.securityContext.user.id,
     );
@@ -37,9 +35,9 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Get("all")
   @Permissions(SecurityScope.USER_READ)
-  @ApiBody({ type: UserDTO })
+  @ApiBody({ type: User })
   async getAll(): Promise<
-    ResponseObject<"users", UserDTO[]> & ResponseObject<"usersCount", number>
+    ResponseObject<"users", User[]> & ResponseObject<"usersCount", number>
   > {
     const users = await this.userRepository.findAll();
     const usersCount = await this.userRepository.count();

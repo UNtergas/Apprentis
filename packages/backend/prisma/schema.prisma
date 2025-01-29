@@ -33,8 +33,8 @@ model User {
 
 
   activities Activity[]
-  feedback Feedback[]
-  validatedCompetenciese SkillValidation[] @relation("Validated")
+  feedbacks Feedback[]
+  validatedCompetencies SkillValidation[] @relation("Validated")
   validatorCompetencies SkillValidation[] @relation("Validator")
 
   tutor User? @relation("Tutor", fields: [tutorId], references: [id])
@@ -90,11 +90,11 @@ enum Level {
 model Skill {
   id          Int      @id @default(autoincrement())
   type        SkillType
+  level       Level
   description String
   activities  SkillOnActivity[]
   missions    SkillOnMission[]
-  validations SkillValidation? 
-  level       Level
+  validation SkillValidation? 
 }
 
 model SkillOnActivity{
@@ -133,8 +133,8 @@ model SkillValidation {
 
   apprentice         User     @relation("Validated", fields: [apprenticeId], references: [id])
   apprenticeId       Int
-  validator    User     @relation("Validator", fields: [validatedBy], references: [id])
-  validatedBy  Int
+  validator    User     @relation("Validator", fields: [validatorId], references: [id])
+  validatorId  Int
   skill        Skill    @relation(fields: [skillId], references: [id])
   skillId      Int      @unique
 }

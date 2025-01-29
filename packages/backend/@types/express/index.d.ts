@@ -1,10 +1,10 @@
-import { UserDTO } from "@shared/backend";
+import { User } from "@shared/backend";
 
 declare global {
   namespace Express {
     interface Request {
       securityContext?: {
-        user: UserDTO;
+        user: User;
       };
     }
   }

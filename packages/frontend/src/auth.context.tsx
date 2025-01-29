@@ -1,6 +1,6 @@
 'use client';
 
-import { SignInResponse, UserDTO } from "@shared/frontend";
+import { SignInResponse, User } from "@shared/frontend";
 import { createContext, useContext, useEffect, useState } from "react";
 import ApiClient from "./api/ApiClient";
 import Cookie from 'js-cookie';
@@ -9,14 +9,14 @@ interface AuthContextType {
     authInit: boolean;
     signIn: (email: string, password: string) => Promise<SignInResponse>;
     signOut: () => void;
-    currentUser: UserDTO | null;
+    currentUser: User | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({children} : {children: React.ReactNode}) => {
     const [authInit, setAuthInit] = useState<boolean>(false);
-    const [currentUser, setCurrentUser] = useState<UserDTO | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     const signIn = async (email: string, password: string):Promise<SignInResponse> => {
         try {

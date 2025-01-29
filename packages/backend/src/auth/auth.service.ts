@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { UserRepository } from "#/user/User.repository";
 import { JwtService } from "@nestjs/jwt";
-import { UserDTO } from "@shared/backend";
+import { User } from "@shared/backend";
 import { SignInDTO, SignInResponse, RegisterDTO } from "@shared/backend";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(data: RegisterDTO): Promise<UserDTO> {
+  async signUp(data: RegisterDTO): Promise<User> {
     const user = await this.userRepo.findOneByEmail(data.email);
     if (user) {
       throw new ConflictException("User already exists");
