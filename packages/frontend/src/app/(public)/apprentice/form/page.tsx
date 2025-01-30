@@ -27,21 +27,21 @@ const mockdata = [
             label: "Study phase",
             links: [
               { label: "Activity 1", link: "/" },
-              { label: "Create Activity", isButton: true }, // Add isButton: true
+              { label: "Create Activity", isButton: true }, 
             ],
           },
           {
             label: "Implementation phase",
             links: [
               { label: "Activity 2", link: "/" },
-              { label: "Create Activity", isButton: true }, // Add isButton: true
+              { label: "Create Activity", isButton: true }, 
             ],
           },
           {
             label: "Improvement phase",
             links: [
               { label: "Activity 3", link: "/" },
-              { label: "Create Activity", isButton: true }, // Add isButton: true
+              { label: "Create Activity", isButton: true }, 
             ],
           },
         ],
@@ -101,7 +101,6 @@ export default function NavbarNested() {
         </div>
       </nav>
 
-      {/* Main Content */}
       <Box style={{ flex: 1, padding: "20px" }}>
         {showForm && (
           <Box
@@ -116,7 +115,7 @@ export default function NavbarNested() {
           >
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <TextInput
-                placeholder="Activity Title"
+                placeholder="Mission Title"
                 label="Title"
                 required
                 {...form.getInputProps("title")}
@@ -130,6 +129,12 @@ export default function NavbarNested() {
                 minRows={4}
                 maxRows={6}
                 {...form.getInputProps("description")}
+              />
+              <TextInput
+                placeholder="Mission Title"
+                label="Title"
+                required
+                {...form.getInputProps("title")}
               />
 
               <DateInput
