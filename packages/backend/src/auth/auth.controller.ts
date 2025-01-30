@@ -18,6 +18,8 @@ import {
 import { ApiBody } from "@nestjs/swagger";
 import { Response } from "express";
 import { CONFIG } from "#/env.config";
+import { Permissions } from "./decorators/permissions.decorator";
+import { SecurityScope } from "./auth.scope";
 
 @Controller("api/auth")
 export class AuthController {
@@ -55,5 +57,12 @@ export class AuthController {
   ): Promise<ResponseObject<"signOut", string>> {
     res.clearCookie("jwt");
     return { signOut: "Signout Successfully" };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("check-auth")
+  @Permissions(SecurityScope.USER_CURRENT_READ)
+  async checkAuth(): Promise<ResponseObject<"checkAuth", boolean>> {
+    return { checkAuth: true };
   }
 }

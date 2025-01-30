@@ -61,6 +61,10 @@ class ApiClient{
     signOut: async (): Promise<string> => {
       const res = await ApiClient.sendRequest<"signOut",string>('POST', '/api/auth/logout');
       return res.signOut;
+    },
+    checkAuth: async (): Promise<{ isAuthenticated: boolean }> => {
+      const res = await ApiClient.sendRequest<"checkAuth", { isAuthenticated: boolean }>('POST', '/api/auth/check-auth');
+      return res.checkAuth;
     }
   }
 

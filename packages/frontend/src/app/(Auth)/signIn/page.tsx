@@ -13,13 +13,12 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import classes from '@/styles/auth.module.css';
-import { APIException, SignInDTO } from '@shared/frontend';
+import { APIException, SignInDTO, emailValidator } from '@shared/frontend';
 import { useRouter } from 'next/navigation';
 import ApiClient from '@/api/ApiClient';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
-
 export default function AuthentificationPage() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -29,7 +28,7 @@ export default function AuthentificationPage() {
             password: '',
         },
         validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            email: (value) => (emailValidator().test(value) ? null : 'Invalid email'),
             password: (value) =>
                 value.length > 0 ? null : 'Password is required',
         },

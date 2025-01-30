@@ -11,7 +11,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import classes from '@/styles/auth.module.css';
-import { APIException, RegisterDTO } from '@shared/frontend';
+import { APIException, emailValidator, RegisterDTO } from '@shared/frontend';
 import { useRouter } from 'next/navigation';
 import ApiClient from '@/api/ApiClient';
 import { useState } from 'react';
@@ -28,7 +28,7 @@ export default function AuthentificationPage() {
         },
         validate: {
             name: (value) => value.length > 0 ? null : 'Name is required',
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            email: (value) => (emailValidator().test(value) ? null : 'Invalid email'),
             password: (value) =>
                 value.length > 0 ? null : 'Password is required',
         },

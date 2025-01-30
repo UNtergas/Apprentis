@@ -74,7 +74,7 @@ export class UserController {
   @Post("/company")
   @Permissions(SecurityScope.USER_WRITE)
   async createCompany(
-    @Body() body: Omit<RegisterDTO, "password">,
+    @Body() body: RegisterDTO,
   ): Promise<ResponseObject<"company", User>> {
     const existingCompany = await this.userRepository.findOneByEmail(
       body.email,
@@ -82,7 +82,7 @@ export class UserController {
     if (existingCompany) {
       throw new ConflictException("User already exists");
     }
-    const password = this.authService.generatePasswordHashed("qwerty");
+    const password = this.authService.generatePasswordHashed(body.password);
     const company = await this.userRepository.createOne({
       ...body,
       password,
@@ -97,13 +97,13 @@ export class UserController {
   @Post("/tutor")
   @Permissions(SecurityScope.USER_WRITE)
   async createTutor(
-    @Body() body: Omit<RegisterDTO, "password">,
+    @Body() body: RegisterDTO,
   ): Promise<ResponseObject<"tutor", User>> {
     const existingTutor = await this.userRepository.findOneByEmail(body.email);
     if (existingTutor) {
       throw new ConflictException("User already exists");
     }
-    const password = this.authService.generatePasswordHashed("qwerty");
+    const password = this.authService.generatePasswordHashed(body.password);
     const tutor = await this.userRepository.createOne({
       ...body,
       password,
