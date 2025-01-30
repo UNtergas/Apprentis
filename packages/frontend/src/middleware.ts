@@ -12,9 +12,10 @@ export async function middleware(req: NextRequest) {
 
   if (!cookie) {
     // Redirect unauthenticated users to the sign-in page
-    return pathname === "/signIn"
-      ? NextResponse.next()
-      : NextResponse.redirect(new URL("/signIn", origin));
+    if (pathname === "/signIn" || pathname === "/signUp") {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(new URL("/signIn", origin));
   }
 
   try {
@@ -22,13 +23,28 @@ export async function middleware(req: NextRequest) {
     const { payload } = await jwtVerify(cookie.value, JWT_SECRET);
     const userRole = payload["role"] as Role;
 
-    // Role-based redirection logic
+    // If the user is trying to access sign-in or sign-up while already logged in, redirect them
+    if (pathname === "/signIn" || pathname === "/signUp") {
+      if (userRole === ROLE.STUDENT) {
+        return NextResponse.redirect(new URL("/user", origin));
+      } else if (userRole === ROLE.TUTOR) {
+        return NextResponse.redirect(new URL("/school", origin));
+      } else if (userRole === ROLE.ADMIN) {
+        return NextResponse.redirect(new URL("/admin", origin));
+      } else if (userRole === ROLE.COMPANY) {
+        return NextResponse.redirect(new URL("/company", origin));
+      }
+    }
+
+    // Role-based redirection logic (if user is on the wrong section)
     if (userRole === ROLE.STUDENT && !pathname.startsWith("/user")) {
       return NextResponse.redirect(new URL("/user", origin));
     } else if (userRole === ROLE.TUTOR && !pathname.startsWith("/school")) {
       return NextResponse.redirect(new URL("/school", origin));
     } else if (userRole === ROLE.ADMIN && !pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/admin", origin));
+    } else if (userRole === ROLE.COMPANY && !pathname.startsWith("/company")) {
+      return NextResponse.redirect(new URL("/company", origin));
     }
 
     // If the user is already on the correct page, allow them to proceed
@@ -41,6 +57,8 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/signIn",
+    "/signUp",
     '/user/:path*',
     '/admin/:path*',
     '/school/:path*',

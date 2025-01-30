@@ -74,7 +74,7 @@ export class UserController {
   @Post("/company")
   @Permissions(SecurityScope.USER_WRITE)
   async createCompany(
-    @Body() body: RegisterDTO,
+    @Body() body: Omit<RegisterDTO, "password">,
   ): Promise<ResponseObject<"company", User>> {
     const existingCompany = await this.userRepository.findOneByEmail(
       body.email,
@@ -82,7 +82,11 @@ export class UserController {
     if (existingCompany) {
       throw new ConflictException("User already exists");
     }
-    const company = await this.userRepository.createOne(body);
+    const password = this.authService.generatePasswordHashed("qwerty");
+    const company = await this.userRepository.createOne({
+      ...body,
+      password,
+    });
     const updatedCompany = await this.userRepository.updateOne(company.id, {
       role: ROLE.COMPANY,
     });
@@ -93,13 +97,17 @@ export class UserController {
   @Post("/tutor")
   @Permissions(SecurityScope.USER_WRITE)
   async createTutor(
-    @Body() body: RegisterDTO,
+    @Body() body: Omit<RegisterDTO, "password">,
   ): Promise<ResponseObject<"tutor", User>> {
     const existingTutor = await this.userRepository.findOneByEmail(body.email);
     if (existingTutor) {
       throw new ConflictException("User already exists");
     }
-    const tutor = await this.userRepository.createOne(body);
+    const password = this.authService.generatePasswordHashed("qwerty");
+    const tutor = await this.userRepository.createOne({
+      ...body,
+      password,
+    });
     const updatedTutor = await this.userRepository.updateOne(tutor.id, {
       role: ROLE.TUTOR,
     });

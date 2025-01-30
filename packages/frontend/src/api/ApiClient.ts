@@ -1,4 +1,4 @@
-import { APIException, ResponseObject, SignInResponse, User } from '@shared/frontend';
+import { APIException, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
 
 
 
@@ -68,6 +68,23 @@ class ApiClient{
     getMe: async (): Promise<User> => {
       const res = await ApiClient.sendRequest<"user", User>('GET', '/api/user/me', undefined);
       return res.user;
+    },
+    getAll: async (): Promise<User[]> => {
+      const res = await ApiClient.sendRequest<"users", User[]>('GET', '/api/user/all', undefined);
+      return res.users;
+    },
+    resetPassword: async (oldPassword: string, newPassword: string): Promise<User> => {
+      const body = { oldPassword, newPassword };
+      const res = await ApiClient.sendRequest<"user", User>('POST', '/api/user/reset-password', body);
+      return res.user;
+    },
+    createCompany: async (data: RegisterDTO): Promise<User> => {
+      const res = await ApiClient.sendRequest<"company", User>('POST', '/api/user/company', data);
+      return res.company;
+    },
+    createTutor: async (data: RegisterDTO): Promise<User> => {
+      const res = await ApiClient.sendRequest<"tutor", User>('POST', '/api/user/tutor', data);
+      return res.tutor;
     }
   }
 }

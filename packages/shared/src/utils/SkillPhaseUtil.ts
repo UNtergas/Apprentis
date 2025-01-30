@@ -1,5 +1,5 @@
-import { Phase, PHASE } from "#/model/activity.dto"
-import { SkillType, SKILLTYPE } from "#/model/skill.dto"
+import { Phase, PHASE } from "../model/activity.dto"
+import { SkillType, SKILLTYPE } from "../model/skill.dto"
 
 export const skillPhaseMapping: Record<Phase, SkillType[]>  = {
     [PHASE.STUDY]:[
