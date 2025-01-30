@@ -16,6 +16,9 @@ import ApiClient from '@/api/ApiClient';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+
+const REDIRECT_DELAY = 3000;
+
 export default function AuthentificationPage() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -33,8 +36,18 @@ export default function AuthentificationPage() {
         try{
             setLoading(true);
             await ApiClient.User.resetPassword(values.oldPassword, values.newPassword);
+            // Show success notification
+            // Show success notification with the same duration as redirection
+            toast.success('Password changed successfully! Redirecting...', {
+                autoClose: REDIRECT_DELAY,
+            });
+
             setLoading(false);
-            router.push('/user')
+
+            // Delay the redirection for the same duration
+            setTimeout(() => {
+                router.push('/user');
+            }, REDIRECT_DELAY);
         }catch(e){
             setLoading(false);
             if(e instanceof APIException){

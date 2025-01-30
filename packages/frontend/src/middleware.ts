@@ -15,7 +15,6 @@ export async function middleware(req: NextRequest) {
     if (pathname === "/signIn" || pathname === "/signUp") {
       return NextResponse.next();
     }
-    // Redirect unauthenticated users trying to access the reset-password page
     if (pathname === "/reset-password") {
       return NextResponse.redirect(new URL("/signIn", origin));
     }
@@ -32,31 +31,42 @@ export async function middleware(req: NextRequest) {
       return NextResponse.next();
     }
 
-    // If the user is trying to access sign-in or sign-up while already logged in, redirect them
+    // Redirect authenticated users away from sign-in/sign-up
     if (pathname === "/signIn" || pathname === "/signUp") {
+      let redirectUrl = "/";
       if (userRole === ROLE.STUDENT) {
-        return NextResponse.redirect(new URL("/user", origin));
+        redirectUrl = "/user";
       } else if (userRole === ROLE.TUTOR) {
-        return NextResponse.redirect(new URL("/tutor", origin));
+        redirectUrl = "/tutor";
       } else if (userRole === ROLE.ADMIN) {
-        return NextResponse.redirect(new URL("/admin", origin));
+        redirectUrl = "/admin";
       } else if (userRole === ROLE.COMPANY) {
-        return NextResponse.redirect(new URL("/company", origin));
+        redirectUrl = "/company";
       }
+      const url = req.nextUrl.clone();
+      url.pathname = redirectUrl;
+      return NextResponse.redirect(url);
     }
 
-    // Role-based redirection logic (if user is on the wrong section)
+    // Role-based redirection logic
     if (userRole === ROLE.STUDENT && !pathname.startsWith("/user")) {
-      return NextResponse.redirect(new URL("/user", origin));
+      const url = req.nextUrl.clone();
+      url.pathname = "/user";
+      return NextResponse.redirect(url);
     } else if (userRole === ROLE.TUTOR && !pathname.startsWith("/tutor")) {
-      return NextResponse.redirect(new URL("/tutor", origin));
+      const url = req.nextUrl.clone();
+      url.pathname = "/tutor";
+      return NextResponse.redirect(url);
     } else if (userRole === ROLE.ADMIN && !pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/admin", origin));
+      const url = req.nextUrl.clone();
+      url.pathname = "/admin";
+      return NextResponse.redirect(url);
     } else if (userRole === ROLE.COMPANY && !pathname.startsWith("/company")) {
-      return NextResponse.redirect(new URL("/company", origin));
+      const url = req.nextUrl.clone();
+      url.pathname = "/company";
+      return NextResponse.redirect(url);
     }
 
-    // If the user is already on the correct page, allow them to proceed
     return NextResponse.next();
   } catch (err) {
     console.error("Invalid JWT:", err);
@@ -69,9 +79,9 @@ export const config = {
     "/reset-password",
     "/signIn",
     "/signUp",
-    '/user/:path*',
-    '/admin/:path*',
-    '/tutor/:path*',
-    '/company/:path*',
+    "/user/:path*",
+    "/admin/:path*",
+    "/tutor/:path*",
+    "/company/:path*",
   ],
 };
