@@ -7,6 +7,7 @@ import { UserRepository } from "#/user/User.repository";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "@shared/backend";
 import { SignInDTO, SignInResponse, RegisterDTO } from "@shared/backend";
+import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,8 @@ export class AuthService {
     if (!data.password) {
       throw new UnauthorizedException("Password is required");
     }
-
+    const password = this.generatePasswordHashed(data.password);
+    data = { ...data, password };
     return await this.userRepo.createOne(data);
   }
 
@@ -32,7 +34,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException("User not found");
     }
-    if (user.password !== data.password) {
+    if (this.verifyPassword(data.password, user.password) === false) {
       throw new UnauthorizedException("Password is incorrect");
     }
 
@@ -43,5 +45,12 @@ export class AuthService {
       email: user.email,
       id: user.id,
     };
+  }
+  generatePasswordHashed(password: string): string {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync());
+  }
+
+  verifyPassword(password: string, hashedPassword: string): boolean {
+    return bcrypt.compareSync(password, hashedPassword);
   }
 }

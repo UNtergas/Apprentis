@@ -1,3 +1,4 @@
+import { Activity } from "./activity.dto";
 import { SkillOnMission } from "./skillOnMission.dto";
 
 export class Mission {
@@ -11,3 +12,13 @@ export class Mission {
 }
 
 export type MissionCreate = Omit<Mission, 'id'|'skills'>;
+
+export type MissionCreateRequest = Omit<Mission, 'id' | 'skills' | 'apprenticeId'> & {
+    apprenticeEmail: string;
+};
+
+export type MissonWithActivities = Mission & {
+    activities: Activity[];
+}
+
+export type MissionGETResponse = MissonWithActivities[];

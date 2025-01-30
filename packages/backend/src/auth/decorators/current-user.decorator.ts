@@ -1,8 +1,15 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from "@nestjs/common";
 
-export const CurrentUser = createParamDecorator(
+export const CurrentUserID = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
-    return request.securityContext.user;
+    if (!request.securityContext) {
+      throw new UnauthorizedException("Context is not set");
+    }
+    return request.securityContext.user.id;
   },
 );

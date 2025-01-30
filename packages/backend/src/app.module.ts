@@ -6,18 +6,18 @@ import { PermissionGuard } from "./guard/permission.guard";
 import { ApprenticeController } from "./apprentice/apprentice.controller";
 import { ApprenticeService } from "./apprentice/apprentice.service";
 import { ApprenticeModule } from "./apprentice/apprentice.module";
-import { MissionController } from './mission/mission.controller';
-import { MissionService } from './mission/mission.service';
-import { MissionModule } from './mission/mission.module';
-import { ActivityController } from './activity/activity.controller';
-import { ActivityService } from './activity/activity.service';
-import { ActivityModule } from './activity/activity.module';
-import { FeedbackService } from './feedback/feedback.service';
-import { SkillService } from './skill/skill.service';
+import { MissionService } from "./mission/mission.service";
+import { ActivityService } from "./activity/activity.service";
+import { ActivityModule } from "./activity/activity.module";
+import { FeedbackService } from "./feedback/feedback.service";
+import { SkillService } from "./skill/skill.service";
+import { CompanyController } from "./company/company.controller";
+import { CompanyService } from "./company/company.service";
+import { CompanyModule } from "./company/company.module";
 
 @Module({
-  imports: [AuthModule, ApprenticeModule, MissionModule, ActivityModule],
-  controllers: [AppController, ApprenticeController, MissionController, ActivityController],
+  imports: [AuthModule, ApprenticeModule, ActivityModule, CompanyModule],
+  controllers: [AppController, ApprenticeController, CompanyController],
   providers: [
     AppService,
     { provide: "APP_GUARD", useClass: PermissionGuard },
@@ -26,6 +26,7 @@ import { SkillService } from './skill/skill.service';
     ActivityService,
     FeedbackService,
     SkillService,
+    CompanyService,
   ],
 })
 export class AppModule {}

@@ -33,13 +33,16 @@ export class UserRepository {
       },
     });
   }
-  // updateOne(id: number, UpdateData: Partial<User>): Promise<User> {
-  //   throw new NotImplementedException("Method not implemented.");
-  // }
-  // deleteOne(id: number): Promise<User> {
-  //   throw new NotImplementedException("Method not implemented.");
-  // }
-  // deleteMany(): Promise<void> {
-  //   throw new NotImplementedException("Method not implemented.");
-  // }
+
+  async updateOne(
+    id: number,
+    UpdateData: Partial<Omit<User, "id">>,
+  ): Promise<User> {
+    return PRISMA.user.update({
+      where: {
+        id: id,
+      },
+      data: UpdateData,
+    });
+  }
 }

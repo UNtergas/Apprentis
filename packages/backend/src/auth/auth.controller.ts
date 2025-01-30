@@ -35,7 +35,6 @@ export class AuthController {
       httpOnly: true,
       maxAge: CONFIG.COOKIE_EXPIRE,
     });
-    console.log(signIn);
     return { signIn };
   }
 

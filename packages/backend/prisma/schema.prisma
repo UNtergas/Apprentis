@@ -20,6 +20,8 @@ enum Role {
   TUTOR
 }
 
+
+
 model User {
   id       Int    @id @default(autoincrement())
   name     String
@@ -59,12 +61,18 @@ model Activity {
   title       String
   description String
   date        DateTime  @default(now())
-
+  phase       Phase
   // Relations
   apprentice        User      @relation(fields: [apprenticeId], references: [id])
   apprenticeId      Int
   skills SkillOnActivity[]
   feedbacks   Feedback[]
+}
+
+enum Phase {
+  STUDY
+  ACTION
+  IMPROVEMENT
 }
 
 enum SkillType {

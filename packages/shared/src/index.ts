@@ -1,7 +1,7 @@
 // Utils
 
 export * from "./utils/Exception";
-
+export * from "./utils/SkillPhaseUtil";
 // DTOS 
 export * from "./model/activity.dto";
 export * from "./model/auth.dto";
