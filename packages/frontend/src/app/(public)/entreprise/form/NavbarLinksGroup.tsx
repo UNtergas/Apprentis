@@ -8,19 +8,39 @@ interface LinkItem {
   link?: string;
   links?: LinkItem[];
   isButton?: boolean;
+  isActivity?: boolean; 
 }
 
 interface LinksGroupProps {
   label: string;
   links?: LinkItem[];
   isButton?: boolean;
+  isActivity?: boolean; 
   onClickButton?: () => void;
   onClickLink?: () => void;
+  onClickActivity?: () => void; 
 }
 
-export function LinksGroup({ label, links, isButton, onClickButton, onClickLink }: LinksGroupProps) {
+export function LinksGroup({ 
+  label, 
+  links, 
+  isButton, 
+  isActivity,
+  onClickButton, 
+  onClickLink,
+  onClickActivity 
+}: LinksGroupProps) {
   const hasLinks = Array.isArray(links) && links.length > 0;
   const [opened, setOpened] = useState(false);
+
+  const handleClick = () => {
+    if (isActivity) {
+      onClickActivity?.();
+    } else {
+      setOpened((o) => !o);
+      onClickLink?.();
+    }
+  };
 
   return (
     <Box>
@@ -30,15 +50,12 @@ export function LinksGroup({ label, links, isButton, onClickButton, onClickLink 
         </Button>
       ) : (
         <UnstyledButton
-          onClick={() => {
-            setOpened((o) => !o);
-            onClickLink?.();
-          }}
+          onClick={handleClick} 
           className={classes.control}
         >
           <Group justify="space-between">
             <Text>{label}</Text>
-            {hasLinks && (
+            {hasLinks && !isActivity && ( 
               <IconChevronRight
                 className={classes.chevron}
                 stroke={1.5}
@@ -57,8 +74,10 @@ export function LinksGroup({ label, links, isButton, onClickButton, onClickLink 
               <LinksGroup
                 key={link.label}
                 {...link}
+                isActivity={link.isActivity} 
                 onClickButton={onClickButton}
                 onClickLink={onClickLink}
+                onClickActivity={onClickActivity}
               />
             ))}
           </Box>
@@ -66,4 +85,4 @@ export function LinksGroup({ label, links, isButton, onClickButton, onClickLink 
       )}
     </Box>
   );
-}
+} 

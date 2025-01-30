@@ -23,15 +23,14 @@ const mockdata = [
       {
         label: "Mission 1",
         links: [
-          
-          { label: "Activity 1"},
-          { label: "Activity 2"},
-          { label: "Activity 3"},
+          { label: "Activity 1", isActivity: true },
+          { label: "Activity 2", isActivity: true },
+          { label: "Activity 3", isActivity: true },
         ],
       },
       {
         label: "Create Mission",
-        isButton: true, 
+        isButton: true,
       },
     ],
   },
@@ -39,27 +38,41 @@ const mockdata = [
 
 export default function NavbarNested() {
   const [showForm, setShowForm] = useState(false);
-  
+  const [formType, setFormType] = useState<"activity" | "mission">("mission");
 
-  const handleButtonClick = () => {
-    setShowForm((prev) => !prev);
+  const handleActivityClick = () => {
+    setShowForm(false);
+    setFormType("activity");
+    setShowForm(true);
   };
 
   const handleLinkClick = () => {
     setShowForm(false);
   };
-
+  
+  const handleButtonClick = () => {
+    setShowForm(false);
+    setFormType("mission");
+    setShowForm(true);
+  };
 
   const form = useForm({
     initialValues: {
       title: "",
       description: "",
       date: new Date(),
+      feedback: "",
+      apprentice: "", 
+      semester: "", 
+      company: "", 
+      skills: "", 
     },
   });
 
   const handleSubmit = () => {
+    console.log("Form submitted:");
     setShowForm(false);
+    form.reset();
   };
 
   const links = mockdata.map((item) => (
@@ -67,7 +80,9 @@ export default function NavbarNested() {
       {...item}
       key={item.label}
       onClickButton={handleButtonClick}
-     
+      onClickActivity={handleActivityClick}
+      onClickLink={handleLinkClick}
+
     />
   ));
 
@@ -102,76 +117,125 @@ export default function NavbarNested() {
             }}
           >
             <form onSubmit={form.onSubmit(handleSubmit)}>
-              <TextInput
-                placeholder="Activity Title"
-                label="Title"
-                required
-                {...form.getInputProps("title")}
-              />
-
-              <Textarea
-                placeholder="Description"
-                label="Description"
-                required
-                autosize
-                minRows={4}
-                maxRows={6}
-                {...form.getInputProps("description")}
-              />
-
-              <DateInput
-                label="Date"
-                placeholder="Select date"
-                defaultValue={new Date()}
-                minDate={new Date()}
-                required
-                valueFormat="DD/MM/YYYY"
-                styles={{
-                  input: {
-                    borderRadius: "6px",
-                    padding: "8px",
-                    backgroundColor: "#f8f9fa",
-                    border: "1px solid #ced4da",
-                    fontSize: "12px",
-                    height: "32px",
-                    width: "100%",
-                  },
-                  label: {
-                    fontWeight: 500,
-                    marginBottom: "6px",
-                    fontSize: "12px",
-                  },
-                 
-                  calendarHeaderControl: {
-                    width: "24px",
-                    height: "24px",
-                  },
-                  day: {
-                    borderRadius: "4px",
-                    padding: "4px",
-                    fontSize: "12px",
-                    "&[data-selected]": {
-                      backgroundColor: "#228be6",
-                      color: "#fff",
-                    },
-                    "&:hover": {
-                      backgroundColor: "#f1f3f5",
-                    },
-                    "&[data-disabled]": {
-                      color: "#adb5bd",
-                      cursor: "not-allowed",
-                    },
-                  },
-                  month: {
-                    fontSize: "12px",
-                  },
-                 
-                }}
-                {...form.getInputProps("date")}
-              />
+              {formType === "activity" ? (
+                <>
+                  <TextInput
+                    label="Activity Title"
+                    value="Activity 1 - Apprentice's Submission"
+                    readOnly
+                    mb="sm"
+                  />
+                  <Textarea
+                    label="Description"
+                    value="Apprentice's pre-filled activity description..."
+                    readOnly
+                    autosize
+                    minRows={4}
+                    mb="sm"
+                  />
+                  <Textarea
+                    label="Your Feedback"
+                    placeholder="Add feedback here..."
+                    {...form.getInputProps("feedback")}
+                    autosize
+                    minRows={4}
+                    mb="sm"
+                  />
+                </>
+              ) : (
+                <>
+                  <TextInput
+                    placeholder="Apprentice"
+                    label="Apprentice"
+                    required
+                    {...form.getInputProps("apprentice")}
+                  />
+                  <TextInput
+                    placeholder="Semester"
+                    label="Semester"
+                    required
+                    {...form.getInputProps("semester")}
+                  />
+                  <TextInput
+                    placeholder="Company"
+                    label="Company"
+                    required
+                    {...form.getInputProps("company")}
+                  />
+                  <TextInput
+                    placeholder="Mission Title"
+                    label="Title"
+                    required
+                    {...form.getInputProps("title")}
+                  />
+                  <Textarea
+                    placeholder="Description"
+                    label="Description"
+                    required
+                    autosize
+                    minRows={4}
+                    {...form.getInputProps("description")}
+                  />
+                  <Textarea
+                    placeholder="Add skills here..."
+                    label=" Skills"
+                    required
+                    autosize
+                    minRows={4}
+                    {...form.getInputProps("skills")}
+                  />
+                  <DateInput
+                    label="Date"
+                    placeholder="Select date"
+                    minDate={new Date()}
+                    required
+                    valueFormat="DD/MM/YYYY"
+                    styles={{
+                      input: {
+                        borderRadius: "6px",
+                        padding: "8px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ced4da",
+                        fontSize: "12px",
+                        height: "32px",
+                        width: "100%",
+                      },
+                      label: {
+                        fontWeight: 500,
+                        marginBottom: "6px",
+                        fontSize: "12px",
+                      },
+                      calendarHeaderControl: {
+                        width: "24px",
+                        height: "24px",
+                      },
+                      day: {
+                        borderRadius: "4px",
+                        padding: "4px",
+                        fontSize: "12px",
+                        "&[data-selected]": {
+                          backgroundColor: "#228be6",
+                          color: "#fff",
+                        },
+                        "&:hover": {
+                          backgroundColor: "#f1f3f5",
+                        },
+                        "&[data-disabled]": {
+                          color: "#adb5bd",
+                          cursor: "not-allowed",
+                        },
+                      },
+                      month: {
+                        fontSize: "12px",
+                      },
+                    }}
+                    {...form.getInputProps("date")}
+                  />
+                </>
+              )}
 
               <Button type="submit" mt="sm">
-                Submit
+                {formType === "activity" ? "Submit Feedback" : "Create Mission"}
               </Button>
             </form>
           </Box>
