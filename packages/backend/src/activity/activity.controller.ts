@@ -18,6 +18,8 @@ import {
 import {
   Activity,
   ActivityCreateRequest,
+  Feedback,
+  FeedbackCreate,
   Mission,
   ResponseObject,
   ROLE,
@@ -65,5 +67,18 @@ export class ActivityController {
       );
     }
     return { missions: missions };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("feedback")
+  @Permissions(SecurityScope.FEEDBACK_WRITE)
+  async createFeedback(
+    @CurrentUserID() userId: number,
+    @Body() body: FeedbackCreate,
+  ): Promise<ResponseObject<"feedback", Feedback>> {
+    const feedback = await this.feedbackService.createOne({
+      ...body,
+    });
+    return { feedback };
   }
 }

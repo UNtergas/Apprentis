@@ -1,6 +1,6 @@
 import PRISMA from "../../prisma";
 import { Injectable } from "@nestjs/common";
-import { Feedback } from "@shared/backend";
+import { Feedback, FeedbackCreate } from "@shared/backend";
 
 @Injectable()
 export class FeedbackService {
@@ -20,7 +20,7 @@ export class FeedbackService {
     });
   }
 
-  async createOne(feedbackCreationData: Feedback): Promise<Feedback> {
+  async createOne(feedbackCreationData: FeedbackCreate): Promise<Feedback> {
     return PRISMA.feedback.create({
       data: {
         ...feedbackCreationData,

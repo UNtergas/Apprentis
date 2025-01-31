@@ -39,12 +39,21 @@ export default function CompanyPage(){
             apprenticeEmail: (value) => emailValidator().test(value) ? null : 'Invalid email',
         },
     })
+    const fetchMissions = async () => {
+        const missions_ = await ApiClient.Activity.getMissions();
+        console.log("i was called");
+        setMissions([...missions_]);
+        if (currentMission) {
+            const updatedMission = missions_.find(m => m.id === currentMission.id);
+            setCurrentMission(updatedMission ? { ...updatedMission } : null); // Trigger hierarchy update in MissionBlock
+        }
+    };
 
     useEffect(() => {
-        async function fetchMissions() {
-            const missions_ = await ApiClient.Activity.getMissions();
-            setMissions(missions_);
-        }
+        // async function fetchMissions() {
+        //     const missions_ = await ApiClient.Activity.getMissions();
+        //     setMissions(missions_);
+        // }
         fetchMissions();
     }, []);
 
@@ -116,7 +125,7 @@ export default function CompanyPage(){
                     </Box>
                 </Modal>
                 {/* Mission Info */}
-                {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} />}
+                {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions}/>}
             </AppShell.Main>
         </AppShell>
     )

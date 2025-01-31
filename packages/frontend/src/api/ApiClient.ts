@@ -1,4 +1,5 @@
-import { Activity, ActivityCreateRequest, APIException, Apprentice, Mission, MissionCreateRequest, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
+import { Activity, ActivityCreateRequest, APIException, Apprentice, Feedback, FeedbackCreate, Mission, MissionCreateRequest, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
+
 
 class ApiClient{
   /**
@@ -98,6 +99,10 @@ class ApiClient{
     createActivity: async ( data: ActivityCreateRequest): Promise<Activity> => {
       const res = await ApiClient.sendRequest<"activity", Activity>('POST', '/api/activity', data);
       return res.activity;
+    },
+    createFeedback: async (data: FeedbackCreate): Promise<Feedback> => {
+      const res = await ApiClient.sendRequest<"feedback", Feedback>('POST', '/api/activity/feedback', data);
+      return res.feedback;
     }
   }
   static Company = {

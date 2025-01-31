@@ -5,3 +5,5 @@ export class Feedback {
     senderId : number;
     activityId : number;
 }
+
+export type FeedbackCreate = Omit<Feedback, 'id'|'createdAt'>;

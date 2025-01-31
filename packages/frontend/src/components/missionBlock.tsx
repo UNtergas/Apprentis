@@ -6,9 +6,10 @@ import { ActivitiesSection } from "./activitySection";
 interface MissionBlockProps {
   mission: Mission | null;
   onClose: () => void; // Callback when closing the card
+  reloadMissions: () => Promise<void>; // Callback to reload missions
 }
 
-export function MissionBlock({ mission, onClose }: MissionBlockProps) {
+export function MissionBlock({ mission, onClose, reloadMissions }: MissionBlockProps) {
     if (!mission) {
       return (
         <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -55,7 +56,7 @@ export function MissionBlock({ mission, onClose }: MissionBlockProps) {
         )} */}
   
         {/* Activities Section */}
-        <ActivitiesSection mission={mission} />
+        <ActivitiesSection mission={mission} reloadMissions={reloadMissions}/>
       </Card>
     );
   }
