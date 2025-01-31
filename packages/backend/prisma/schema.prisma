@@ -53,6 +53,8 @@ model Mission{
   apprenticeId  Int
   company       User      @relation("Company",fields: [companyId], references: [id])
   companyId     Int
+
+  activities    Activity[]
   skills        SkillOnMission[]
 }
 
@@ -65,6 +67,8 @@ model Activity {
   // Relations
   apprentice        User      @relation(fields: [apprenticeId], references: [id])
   apprenticeId      Int
+  mission           Mission   @relation(fields: [missionId], references: [id])
+  missionId         Int
   skills SkillOnActivity[]
   feedbacks   Feedback[]
 }

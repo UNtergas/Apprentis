@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Apprentice } from "@shared/backend";
-import PRISMA from "prisma";
+import { Mission} from "@prisma/client";
+import PRISMA from "../../prisma";
 @Injectable()
 export class ApprenticeService {
   async findAll(): Promise<Apprentice[]> {
@@ -9,6 +10,7 @@ export class ApprenticeService {
         mission_apprentice: {
           include: {
             skills: true,
+            activities: true,
           },
         },
         activities: {
@@ -31,6 +33,7 @@ export class ApprenticeService {
         mission_apprentice: {
           include: {
             skills: true,
+            activities: true,
           },
         },
         activities: {
@@ -53,6 +56,7 @@ export class ApprenticeService {
         mission_apprentice: {
           include: {
             skills: true,
+            activities: true,
           },
         },
         activities: {

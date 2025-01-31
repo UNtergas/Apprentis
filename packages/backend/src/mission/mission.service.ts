@@ -12,6 +12,12 @@ export class MissionService {
     return PRISMA.mission.findMany({
       include: {
         skills: true,
+        activities: {
+          include: {
+            feedbacks: true,
+            skills: true,
+          },
+        },
       },
     });
   }
@@ -23,6 +29,12 @@ export class MissionService {
       },
       include: {
         skills: true,
+        activities: {
+          include: {
+            feedbacks: true,
+            skills: true,
+          },
+        },
       },
     });
   }
@@ -34,6 +46,12 @@ export class MissionService {
       },
       include: {
         skills: true,
+        activities: {
+          include: {
+            feedbacks: true,
+            skills: true,
+          },
+        },
       },
     });
   }

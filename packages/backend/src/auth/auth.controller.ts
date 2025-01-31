@@ -61,7 +61,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post("check-auth")
-  @Permissions(SecurityScope.USER_CURRENT_READ)
+  @Permissions(SecurityScope.TOKEN_CURRENT)
   async checkAuth(): Promise<ResponseObject<"checkAuth", boolean>> {
     return { checkAuth: true };
   }

@@ -1,6 +1,4 @@
-import { APIException, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
-
-
+import { Activity, ActivityCreateRequest, APIException, Apprentice, Mission, MissionCreateRequest, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
 
 class ApiClient{
   /**
@@ -62,8 +60,8 @@ class ApiClient{
       const res = await ApiClient.sendRequest<"signOut",string>('POST', '/api/auth/logout');
       return res.signOut;
     },
-    checkAuth: async (): Promise<{ isAuthenticated: boolean }> => {
-      const res = await ApiClient.sendRequest<"checkAuth", { isAuthenticated: boolean }>('POST', '/api/auth/check-auth');
+    checkAuth: async (): Promise<boolean> => {
+      const res = await ApiClient.sendRequest<"checkAuth",boolean>('POST', '/api/auth/check-auth');
       return res.checkAuth;
     }
   }
@@ -89,6 +87,30 @@ class ApiClient{
     createTutor: async (data: RegisterDTO): Promise<User> => {
       const res = await ApiClient.sendRequest<"tutor", User>('POST', '/api/user/tutor', data);
       return res.tutor;
+    }
+  }
+  static Activity = {
+    getMissions: async (): Promise<Mission[]> => {
+      const res = await ApiClient.sendRequest<"missions", Mission[]>('GET', '/api/activity/missions', undefined);
+      console.log(res);
+      return res.missions;
+    },
+    createActivity: async ( data: ActivityCreateRequest): Promise<Activity> => {
+      const res = await ApiClient.sendRequest<"activity", Activity>('POST', '/api/activity', data);
+      return res.activity;
+    }
+  }
+  static Company = {
+    createMission: async (data: MissionCreateRequest): Promise<Mission> => {
+      const res = await ApiClient.sendRequest<"mission", Mission>('POST', '/api/company/mission', data);
+      return res.mission;
+    }
+  }
+  static Apprentice = {
+    getApprenticeInfo: async (): Promise<Apprentice> => {
+      const res = await ApiClient.sendRequest<"apprentice", Apprentice>('GET', '/api/apprentice/missions', undefined);
+      return res.apprentice;
+
     }
   }
 }

@@ -48,8 +48,7 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
     const checkAuth = async (): Promise<boolean> => {
         try {
             // Use a lightweight endpoint to check if the user is authenticated
-            const res = await ApiClient.Auth.checkAuth(); // This endpoint should return 200 if the user is authenticated
-            return res.isAuthenticated; // Adjust based on your API response structure
+            return ApiClient.Auth.checkAuth();
         } catch {
             return false;
         }
@@ -60,9 +59,11 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
             try {
                 const isAuthenticated = await checkAuth();
                 if (isAuthenticated) {
+                    await fetchCurrentUser();
+                    console.log("User is logged in", currentUser);
+                }else{
+                    console.log("User is not logged in");
                 }
-                await fetchCurrentUser();
-                console.log("User is logged in", currentUser);
             } catch (e) {
                 console.error("Failed to fetch user during initialization:", e);
                 signOut();

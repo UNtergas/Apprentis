@@ -1,26 +1,40 @@
 import { FeedbackService } from "#/feedback/feedback.service";
 import { SkillService } from "#/skill/skill.service";
-import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from "@nestjs/common";
 import { ActivityService } from "./activity.service";
 import { Permissions } from "#/auth/decorators/permissions.decorator";
 import { SecurityScope } from "#/auth/auth.scope";
-import { CurrentUserID } from "#/auth/decorators/current-user.decorator";
+import {
+  CurrentUserID,
+  CurrentUserRole,
+} from "#/auth/decorators/current-user.decorator";
 import {
   Activity,
   ActivityCreateRequest,
+  Mission,
   ResponseObject,
+  ROLE,
 } from "@shared/backend";
+import { MissionService } from "#/mission/mission.service";
 
 @Controller("api/activity")
 export class ActivityController {
   constructor(
     private activityService: ActivityService,
+    private missionService: MissionService,
     private feedbackService: FeedbackService,
     private skillService: SkillService,
   ) {}
 
   @HttpCode(HttpStatus.CREATED)
-  @Post("activity")
+  @Post("")
   @Permissions(SecurityScope.ACTIVITY_WRITE)
   async createActivity(
     @CurrentUserID() userId: number,
@@ -31,5 +45,25 @@ export class ActivityController {
       apprenticeId: userId,
     });
     return { activity };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get("missions")
+  @Permissions(SecurityScope.MISSION_READ)
+  async getMissions(
+    @CurrentUserID() userId: number,
+    @CurrentUserRole() role: string,
+  ): Promise<ResponseObject<"missions", Mission[]>> {
+    let missions: Mission[] = [];
+    if (role === ROLE.STUDENT) {
+      missions = (await this.missionService.findAll()).filter(
+        (mission) => mission.apprenticeId === userId,
+      );
+    } else if (role === ROLE.COMPANY) {
+      missions = (await this.missionService.findAll()).filter(
+        (mission) => mission.companyId === userId,
+      );
+    }
+    return { missions: missions };
   }
 }

@@ -9,16 +9,17 @@ export class Mission {
     apprenticeId : number;
     companyId : number;
     skills : SkillOnMission[];
-}
-
-export type MissionCreate = Omit<Mission, 'id'|'skills'>;
-
-export type MissionCreateRequest = Omit<Mission, 'id' | 'skills' | 'apprenticeId'> & {
-    apprenticeEmail: string;
-};
-
-export type MissonWithActivities = Mission & {
     activities: Activity[];
 }
 
-export type MissionGETResponse = MissonWithActivities[];
+export type MissionCreate = Omit<Mission, 'id'|'skills'|'activities'>;
+
+export type MissionCreateRequest = Omit<Mission, 'id' | 'skills' | 'apprenticeId'|'companyId'|'activities'> & {
+    apprenticeEmail: string;
+};
+
+// export type MissonWithActivities = Mission & {
+//     activities: Activity[];
+// }
+
+// export type MissionGETResponse = MissonWithActivities[];

@@ -1,5 +1,5 @@
 'use client';
-import { Header } from "@/components/header";
+import { Header } from "@/container/header";
 import { AppShell } from "@mantine/core";
 
 export default function PrivatePage(){

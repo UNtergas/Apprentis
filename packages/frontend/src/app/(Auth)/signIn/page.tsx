@@ -33,7 +33,7 @@ export default function AuthentificationPage() {
                 value.length > 0 ? null : 'Password is required',
         },
     });
-    const handelSubmit = async ( values: SignInDTO) => {
+    const handleSubmit = async ( values: SignInDTO) => {
         try{
             setLoading(true);
             await ApiClient.Auth.signIn(values.email, values.password);
@@ -62,7 +62,7 @@ export default function AuthentificationPage() {
         </Text>
 
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-            <form onSubmit={form.onSubmit(handelSubmit)}>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
                 <TextInput label="Email" placeholder="you@insa.fr" required {...form.getInputProps('email')}/>
                 <PasswordInput label="Password" placeholder="Your password" required mt="md" {...form.getInputProps('password')} />
                 <Group justify="space-between" mt="lg">

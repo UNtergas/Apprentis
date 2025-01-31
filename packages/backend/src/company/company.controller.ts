@@ -4,19 +4,13 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
 } from "@nestjs/common";
 import { CompanyService } from "./company.service";
 import { CurrentUserID } from "#/auth/decorators/current-user.decorator";
-import {
-  Mission,
-  MissionCreateRequest,
-  MissionGETResponse,
-  ResponseObject,
-} from "@shared/backend";
+import { Mission, MissionCreateRequest, ResponseObject } from "@shared/backend";
 import { Permissions } from "#/auth/decorators/permissions.decorator";
 import { ApprenticeService } from "#/apprentice/apprentice.service";
 import { ActivityService } from "#/activity/activity.service";
@@ -30,28 +24,28 @@ export class CompanyController {
     private activityService: ActivityService,
   ) {}
 
-  @HttpCode(HttpStatus.OK)
-  @Get("missions")
-  @Permissions(SecurityScope.MISSION_READ)
-  async getMissions(
-    @CurrentUserID() userId: number,
-  ): Promise<ResponseObject<"missions", Mission[]>> {
-    const missions = (await this.missionService.findAll()).filter(
-      (mission) => mission.companyId === userId,
-    );
-    const activities = await this.activityService.findAll();
+  // @HttpCode(HttpStatus.OK)
+  // @Get("missions")
+  // @Permissions(SecurityScope.MISSION_READ)
+  // async getMissions(
+  //   @CurrentUserID() userId: number,
+  // ): Promise<ResponseObject<"missions", Mission[]>> {
+  //   const missions = (await this.missionService.findAll()).filter(
+  //     (mission) => mission.companyId === userId,
+  //   );
+  //   // const activities = await this.activityService.findAll();
 
-    // Step 3: Map missions and attach their corresponding activities
-    const missionsWithActivities: MissionGETResponse = missions.map(
-      (mission) => ({
-        ...mission,
-        activities: activities.filter(
-          (activity) => activity.apprenticeId === mission.apprenticeId,
-        ),
-      }),
-    );
-    return { missions: missionsWithActivities };
-  }
+  //   // // Step 3: Map missions and attach their corresponding activities
+  //   // const missionsWithActivities: MissionGETResponse = missions.map(
+  //   //   (mission) => ({
+  //   //     ...mission,
+  //   //     activities: activities.filter(
+  //   //       (activity) => activity.apprenticeId === mission.apprenticeId,
+  //   //     ),
+  //   //   }),
+  //   // );
+  //   return { missions: missions };
+  // }
 
   @HttpCode(HttpStatus.CREATED)
   @Post("mission")
@@ -70,7 +64,9 @@ export class CompanyController {
       throw new BadRequestException("Apprentice not found");
     }
     const mission = await this.missionService.createOne({
-      ...body,
+      title: body.title,
+      description: body.description,
+      semester: body.semester,
       companyId: userId,
       apprenticeId: apprentice.id,
     });

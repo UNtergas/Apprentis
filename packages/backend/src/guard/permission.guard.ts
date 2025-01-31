@@ -34,9 +34,9 @@ export class PermissionGuard implements CanActivate {
     // }
 
     // const token = request.headers.authorization.split(" ")[1];
-    // if (!token) {
-    //   throw new UnauthorizedException("No token provided");
-    // }
+    if (!token) {
+      throw new UnauthorizedException("No token provided");
+    }
     try {
       const payload = this.jwtService.verify(token);
       request.securityContext = {

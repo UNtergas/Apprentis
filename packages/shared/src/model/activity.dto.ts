@@ -17,10 +17,11 @@ export class Activity{
     date  : Date;
     phase : Phase;
     apprenticeId : number;
+    missionId : number;
     skills : SkillOnActivity[];
     feedbacks : Feedback[];
 }
 
-export type ActivityCreate = Omit<Activity, 'id'|'skills'|'feedbacks'>;
+export type ActivityCreate = Omit<Activity, 'id'|'skills'|'feedbacks'|'date'>;
 
-export type ActivityCreateRequest = Omit<Activity, 'id'|'skills'|'feedbacks'|'apprenticeId'>;
+export type ActivityCreateRequest = Omit<Activity, 'id'|'skills'|'feedbacks'|'apprenticeId'|'date'>;

@@ -1,6 +1,6 @@
 'use client';
 import { Alert, AppShell, Button, Flex, Group, Modal, Table, TextInput } from "@mantine/core";
-import { Header } from "@/components/header";
+import { Header } from "@/container/header";
 import { useEffect, useState } from "react";
 import { APIException, emailValidator, User } from "@shared/frontend";
 import { useForm } from "@mantine/form";
