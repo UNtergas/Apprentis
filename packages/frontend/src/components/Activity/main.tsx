@@ -45,7 +45,6 @@ const ActivitySection = (
     const getActivitiesByPhase = (phase:Phase) => 
         mission.activitiesDetailed.filter(activity => activity.phase === phase);
 
-    console.log(mission);
     //Feedback form info
     const feedbackForm = useForm({
         initialValues: {
@@ -187,14 +186,16 @@ const ActivitySection = (
                                                     canEditActivity={canEditActivity}
                                                     startEditActivity={startEditActivity}
                                                     triggerSkill={triggerSkill}
+                                                    canLeaveFeedback={canLeaveFeedback}
+                                                    triggerFeedback={triggerFeedback}
                                                     />
                                                 )}
                                                 {/* Feedback Section */}
-                                                <ActivityFeedback
+                                                {/* <ActivityFeedback
                                                     activity={activity}
                                                     canLeaveFeedback={canLeaveFeedback}
                                                     triggerFeedback={triggerFeedback}
-                                                />
+                                                /> */}
                                             </List.Item>
                                         ))}
                                     </List>

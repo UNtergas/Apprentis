@@ -24,6 +24,7 @@ import {
   ActivityUpdateRequest,
   Feedback,
   FeedbackCreate,
+  FeedbackDetailed,
   Mission,
   MissionDetailed,
   ResponseObject,
@@ -31,6 +32,7 @@ import {
   SkillCreate,
 } from "@shared/backend";
 import { MissionService } from "#/mission/mission.service";
+import { UserRepository } from "#/user/User.repository";
 
 @Controller("api/activity")
 export class ActivityController {
@@ -39,6 +41,7 @@ export class ActivityController {
     private missionService: MissionService,
     private feedbackService: FeedbackService,
     private skillService: SkillService,
+    private userReposiotry: UserRepository,
   ) {}
 
   @HttpCode(HttpStatus.CREATED)
@@ -87,6 +90,30 @@ export class ActivityController {
       }),
     );
     return { missions: missionsDetailed };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get("feedback/:activityId")
+  @Permissions(SecurityScope.FEEDBACK_READ)
+  async getFeedback(
+    @Param("activityId") id: string,
+  ): Promise<ResponseObject<"feedbacks", FeedbackDetailed[]>> {
+    const activityId = parseInt(id);
+    const feedbacks = (await this.feedbackService.findAll()).filter(
+      (feedback: Feedback) => feedback.activityId === activityId,
+    );
+    const users = await this.userReposiotry.findAll();
+    const userMap = new Map(
+      users.map((user) => [user.id, { name: user.name, role: user.role }]),
+    );
+    const feedbacksDetailed: FeedbackDetailed[] = feedbacks.map(
+      (feedback: Feedback) => ({
+        ...feedback,
+        senderName: userMap.get(feedback.senderId).name,
+        senderRole: userMap.get(feedback.senderId).role,
+      }),
+    );
+    return { feedbacks: feedbacksDetailed };
   }
 
   @HttpCode(HttpStatus.OK)

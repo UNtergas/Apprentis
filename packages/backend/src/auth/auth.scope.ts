@@ -34,6 +34,7 @@ export const COMPANY_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
   SecurityScope.MISSION_READ,
   SecurityScope.ACTIVITY_READ,
   SecurityScope.FEEDBACK_WRITE,
+  SecurityScope.FEEDBACK_READ,
 ]);
 
 export const ADMIN_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([

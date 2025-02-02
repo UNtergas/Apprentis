@@ -1,4 +1,4 @@
-import { Activity, ActivityCreateRequest, ActivityUpdateRequest, APIException, Apprentice, Feedback, FeedbackCreate, Mission, MissionCreateRequest, MissionDetailed, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
+import { Activity, ActivityCreateRequest, ActivityUpdateRequest, APIException, Apprentice, Feedback, FeedbackCreate, FeedbackDetailed, Mission, MissionCreateRequest, MissionDetailed, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
 
 
 class ApiClient{
@@ -94,6 +94,10 @@ class ApiClient{
     getMissions: async (): Promise<MissionDetailed[]> => {
       const res = await ApiClient.sendRequest<"missions", MissionDetailed[]>('GET', '/api/activity/missions', undefined);
       return res.missions;
+    },
+    getFeedbacks: async (activityId: number): Promise<FeedbackDetailed[]> => {
+      const res = await ApiClient.sendRequest<"feedbacks", FeedbackDetailed[]>('GET', `/api/activity/feedback/${activityId}`, undefined);
+      return res.feedbacks;
     },
     createActivity: async ( data: ActivityCreateRequest): Promise<Activity> => {
       const res = await ApiClient.sendRequest<"activity", Activity>('POST', '/api/activity', data);

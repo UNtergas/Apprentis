@@ -19,7 +19,6 @@ export function MissionBlock({ mission, onClose, reloadMissions }: MissionBlockP
         </Card>
       );
     }
-    console.log(mission);
     return (
       <Card shadow="sm" p="lg" radius="md" withBorder>
         {/* Title and Semester */}

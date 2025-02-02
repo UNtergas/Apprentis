@@ -1,6 +1,7 @@
 import { Group, Text, Divider, Badge, Popover, Accordion, Button} from "@mantine/core"
 import { ActivityDetailed } from "@shared/frontend";
 import { IconPencil, IconPlus } from "@tabler/icons-react"
+import { ActivityFeedback } from "./activityFeedback";
 
 
 
@@ -28,10 +29,12 @@ interface ActivityDisplayProps {
     canEditActivity: boolean;
     startEditActivity: (activity: ActivityDetailed) => void;
     triggerSkill: (activity: ActivityDetailed) => void;
+    canLeaveFeedback: boolean;
+    triggerFeedback: (activity: ActivityDetailed) => void;
 }
 
 export const ActivityDisplay = (
-    {activity, canEditActivity, startEditActivity,triggerSkill}: ActivityDisplayProps
+    {activity, canEditActivity, startEditActivity,triggerSkill, canLeaveFeedback, triggerFeedback}: ActivityDisplayProps
 )=>{
     return(
         <Accordion chevronPosition="left" variant="contained">
@@ -68,6 +71,11 @@ export const ActivityDisplay = (
                         <IconPlus/> Add Skill
                         </Button>}
                 </Group>
+            <ActivityFeedback
+                activity={activity}
+                canLeaveFeedback={canLeaveFeedback}
+                triggerFeedback={triggerFeedback}
+                />
             </Accordion.Panel>
         </Accordion>
     )

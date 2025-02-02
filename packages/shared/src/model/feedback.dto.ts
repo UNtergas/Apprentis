@@ -1,3 +1,5 @@
+import { Role } from "./user.dto";
+
 export class Feedback {
     readonly id : number;
     content : string;
@@ -5,5 +7,8 @@ export class Feedback {
     senderId : number;
     activityId : number;
 }
-
+export type FeedbackDetailed = Feedback & {
+    senderName: string;
+    senderRole: Role;
+};
 export type FeedbackCreate = Omit<Feedback, 'id'|'createdAt'>;
