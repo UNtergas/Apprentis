@@ -27,13 +27,6 @@ export class PermissionGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const token = request.cookies["jwt"];
-    // const authHeader = request.headers.authorization;
-
-    // if (!authHeader) {
-    //   throw new UnauthorizedException("Authorization header is missing");
-    // }
-
-    // const token = request.headers.authorization.split(" ")[1];
     if (!token) {
       throw new UnauthorizedException("No token provided");
     }

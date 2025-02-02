@@ -1,4 +1,4 @@
-import { Activity, ActivityCreateRequest, APIException, Apprentice, Feedback, FeedbackCreate, Mission, MissionCreateRequest, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
+import { Activity, ActivityCreateRequest, ActivityUpdateRequest, APIException, Apprentice, Feedback, FeedbackCreate, Mission, MissionCreateRequest, MissionDetailed, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
 
 
 class ApiClient{
@@ -91,9 +91,8 @@ class ApiClient{
     }
   }
   static Activity = {
-    getMissions: async (): Promise<Mission[]> => {
-      const res = await ApiClient.sendRequest<"missions", Mission[]>('GET', '/api/activity/missions', undefined);
-      console.log(res);
+    getMissions: async (): Promise<MissionDetailed[]> => {
+      const res = await ApiClient.sendRequest<"missions", MissionDetailed[]>('GET', '/api/activity/missions', undefined);
       return res.missions;
     },
     createActivity: async ( data: ActivityCreateRequest): Promise<Activity> => {
@@ -103,6 +102,10 @@ class ApiClient{
     createFeedback: async (data: FeedbackCreate): Promise<Feedback> => {
       const res = await ApiClient.sendRequest<"feedback", Feedback>('POST', '/api/activity/feedback', data);
       return res.feedback;
+    },
+    updateActivity: async (id: number, data: ActivityUpdateRequest | null = null): Promise<Activity> => {
+      const res = await ApiClient.sendRequest<"activity", Activity>('PUT', `/api/activity/${id}`, data);
+      return res.activity;
     }
   }
   static Company = {

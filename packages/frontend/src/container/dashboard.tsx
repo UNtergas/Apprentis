@@ -1,13 +1,13 @@
 import { Group, Code, ScrollArea } from "@mantine/core";
 import { IconBook, IconBuildings, IconDirectionSign, IconLicense, IconPencil, IconProgressCheck, IconSchool } from "@tabler/icons-react";
 import classes from "@/styles/dashboard.module.css";
-import { Mission, PHASE, ROLE, Role } from "@shared/frontend";
+import { MissionDetailed, PHASE, ROLE, Role } from "@shared/frontend";
 import { LinkItem, LinksGroup } from "@/components/linkgroup";
 
 interface DashBoardProps {
-    missions?: Mission[];
+    missions?: MissionDetailed[];
     formCallBack?: () => void;
-    missionCallBack?: (mission: Mission) => void;
+    missionCallBack?: (mission: MissionDetailed) => void;
     role?: Role;
 }
 

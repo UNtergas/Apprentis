@@ -28,7 +28,7 @@ export default function Home() {
             </Link>
           </Button>
           <Button size="xl" radius="sm" variant="filled" color="red.2">
-            <Link href="/school">
+            <Link href="/tutor">
               ENSEIGNANTS
             </Link>
           </Button>

@@ -106,7 +106,7 @@ model Skill {
   description String
   activities  SkillOnActivity[]
   missions    SkillOnMission[]
-  validation SkillValidation? 
+  validation  SkillValidation? 
 }
 
 model SkillOnActivity{

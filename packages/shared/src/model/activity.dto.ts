@@ -1,4 +1,5 @@
 import { Feedback } from "./feedback.dto";
+import { Skill, type Level, type SkillType } from "./skill.dto";
 import { SkillOnActivity } from "./skillOnActivity.dto";
 
 
@@ -21,7 +22,16 @@ export class Activity{
     skills : SkillOnActivity[];
     feedbacks : Feedback[];
 }
+export type ActivityDetailed = Activity & {
+    skillsDetailed : Skill[];
+};
 
 export type ActivityCreate = Omit<Activity, 'id'|'skills'|'feedbacks'|'date'>;
 
 export type ActivityCreateRequest = Omit<Activity, 'id'|'skills'|'feedbacks'|'apprenticeId'|'date'>;
+
+export type ActivityUpdateRequest = Partial<ActivityCreateRequest> & {
+    skillDescription?: string;
+    skillLevel?: Level;
+    skillType?: SkillType;
+};

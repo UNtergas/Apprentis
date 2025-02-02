@@ -10,7 +10,16 @@ export class CompanyService {
         mission_company: {
           include: {
             skills: true,
-            activities: true,
+            activities: {
+              include: {
+                feedbacks: true,
+                skills: {
+                  include: {
+                    skill: true,
+                  },
+                },
+              },
+            },
           },
         },
         feedbacks: true,
@@ -27,7 +36,16 @@ export class CompanyService {
         mission_company: {
           include: {
             skills: true,
-            activities: true,
+            activities: {
+              include: {
+                feedbacks: true,
+                skills: {
+                  include: {
+                    skill: true,
+                  },
+                },
+              },
+            },
           },
         },
         feedbacks: true,
@@ -44,7 +62,16 @@ export class CompanyService {
         mission_company: {
           include: {
             skills: true,
-            activities: true,
+            activities: {
+              include: {
+                feedbacks: true,
+                skills: {
+                  include: {
+                    skill: true,
+                  },
+                },
+              },
+            },
           },
         },
         feedbacks: true,

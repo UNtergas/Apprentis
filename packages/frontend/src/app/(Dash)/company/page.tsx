@@ -7,7 +7,7 @@ import { DashBoard } from "@/container/dashboard";
 import { Header } from "@/container/header";
 import { AppShell, Box, Button, Modal, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { APIException, emailValidator, MissionCreateRequest, Mission } from "@shared/frontend";
+import { APIException, emailValidator, MissionCreateRequest, Mission, MissionDetailed } from "@shared/frontend";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -16,11 +16,11 @@ export default function CompanyPage(){
 
     const [showForm, setShowForm] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
-    const [currentMission, setCurrentMission] = useState<Mission | null>(null);
-    const [missions, setMissions] = useState<Mission[]>([]);
+    const [currentMission, setCurrentMission] = useState<MissionDetailed | null>(null);
+    const [missions, setMissions] = useState<MissionDetailed[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const missionCallBack = (mission: Mission) => {
+    const missionCallBack = (mission: MissionDetailed) => {
         setCurrentMission(mission);
         setShowInfo(true);
     }
@@ -41,7 +41,6 @@ export default function CompanyPage(){
     })
     const fetchMissions = async () => {
         const missions_ = await ApiClient.Activity.getMissions();
-        console.log("i was called");
         setMissions([...missions_]);
         if (currentMission) {
             const updatedMission = missions_.find(m => m.id === currentMission.id);

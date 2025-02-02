@@ -1,6 +1,6 @@
 import PRISMA from "../../prisma";
 import { Injectable } from "@nestjs/common";
-import { Activity, ActivityCreate } from "@shared/backend";
+import { Activity, ActivityCreate, SkillCreate } from "@shared/backend";
 
 @Injectable()
 export class ActivityService {
@@ -11,7 +11,11 @@ export class ActivityService {
   async findAll(): Promise<Activity[]> {
     return PRISMA.activity.findMany({
       include: {
-        skills: true,
+        skills: {
+          include: {
+            skill: true,
+          },
+        },
         feedbacks: true,
       },
     });
@@ -23,7 +27,11 @@ export class ActivityService {
         id: id,
       },
       include: {
-        skills: true,
+        skills: {
+          include: {
+            skill: true,
+          },
+        },
         feedbacks: true,
       },
     });
@@ -35,7 +43,45 @@ export class ActivityService {
         ...activityCreationData,
       },
       include: {
-        skills: true,
+        skills: {
+          include: {
+            skill: true,
+          },
+        },
+        feedbacks: true,
+      },
+    });
+  }
+
+  async updateOne(
+    id: number,
+    activityData: Partial<ActivityCreate> | null = null,
+    newSkill: SkillCreate | null = null,
+  ): Promise<Activity> {
+    return PRISMA.activity.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...activityData,
+        skills: newSkill
+          ? {
+              create: [
+                {
+                  skill: {
+                    create: newSkill,
+                  },
+                },
+              ],
+            }
+          : undefined,
+      },
+      include: {
+        skills: {
+          include: {
+            skill: true,
+          },
+        },
         feedbacks: true,
       },
     });

@@ -38,7 +38,8 @@ export default function AuthentificationPage() {
             setLoading(true);
             await ApiClient.Auth.signIn(values.email, values.password);
             setLoading(false);
-            router.push('/user')
+            // window.location.href = '/user';
+            router.push('/user');
         }catch(e){
             setLoading(false);
             if(e instanceof APIException){

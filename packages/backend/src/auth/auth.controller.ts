@@ -5,6 +5,8 @@ import {
   HttpStatus,
   Body,
   Res,
+  Req,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {
@@ -14,16 +16,18 @@ import {
   RegisterDTO,
   SignInDTO,
 } from "@shared/backend";
-
+import { Request } from "express";
 import { ApiBody } from "@nestjs/swagger";
 import { Response } from "express";
 import { CONFIG } from "#/env.config";
-import { Permissions } from "./decorators/permissions.decorator";
-import { SecurityScope } from "./auth.scope";
+import { JwtService } from "@nestjs/jwt";
 
 @Controller("api/auth")
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private jwtService: JwtService,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post("login")
@@ -36,6 +40,7 @@ export class AuthController {
     res.cookie("jwt", signIn.token, {
       httpOnly: true,
       maxAge: CONFIG.COOKIE_EXPIRE,
+      sameSite: "strict",
     });
     return { signIn };
   }
@@ -61,8 +66,18 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post("check-auth")
-  @Permissions(SecurityScope.TOKEN_CURRENT)
-  async checkAuth(): Promise<ResponseObject<"checkAuth", boolean>> {
-    return { checkAuth: true };
+  async checkAuth(
+    @Req() req: Request,
+  ): Promise<ResponseObject<"checkAuth", boolean>> {
+    const token = req.cookies["jwt"];
+    if (!token) {
+      return { checkAuth: false };
+    }
+    try {
+      this.jwtService.verify(token);
+      return { checkAuth: true };
+    } catch {
+      throw new UnauthorizedException("Invalid or expired token");
+    }
   }
 }

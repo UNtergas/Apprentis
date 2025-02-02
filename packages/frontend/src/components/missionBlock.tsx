@@ -1,10 +1,10 @@
 import { Card, Group, Title, Badge, Divider, Blockquote, Text, ActionIcon } from "@mantine/core";
 import { IconTarget, IconX } from "@tabler/icons-react";
-import { Mission } from "@shared/frontend";
-import { ActivitiesSection } from "./activitySection";
+import { MissionDetailed } from "@shared/frontend";
+import ActivitySection from "./Activity/main";
 
 interface MissionBlockProps {
-  mission: Mission | null;
+  mission: MissionDetailed | null;
   onClose: () => void; // Callback when closing the card
   reloadMissions: () => Promise<void>; // Callback to reload missions
 }
@@ -19,6 +19,7 @@ export function MissionBlock({ mission, onClose, reloadMissions }: MissionBlockP
         </Card>
       );
     }
+    console.log(mission);
     return (
       <Card shadow="sm" p="lg" radius="md" withBorder>
         {/* Title and Semester */}
@@ -39,24 +40,8 @@ export function MissionBlock({ mission, onClose, reloadMissions }: MissionBlockP
           {mission.description}
         </Blockquote>
   
-        {/* Skills Section */}
-        {/* {mission.skills.length > 0 && (
-          <>
-            <Title order={5} mt="md">
-              Required Skills
-            </Title>
-            <Group gap="xs">
-              {mission.skills.map((skill, index) => (
-                <Badge key={index} color="teal">
-                  {skill.name}
-                </Badge>
-              ))}
-            </Group>
-          </>
-        )} */}
-  
         {/* Activities Section */}
-        <ActivitiesSection mission={mission} reloadMissions={reloadMissions}/>
+        <ActivitySection mission={mission} reloadMissions={reloadMissions}/>
       </Card>
     );
   }

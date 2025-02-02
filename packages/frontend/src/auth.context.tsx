@@ -2,7 +2,7 @@
 
 import { SignInResponse, User } from "@shared/frontend";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname} from "next/navigation";
 import ApiClient from "./api/ApiClient";
 
 interface AuthContextType {
@@ -18,6 +18,7 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
     const [authInit, setAuthInit] = useState<boolean>(false);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const router = useRouter();
+    const pathname = usePathname()
 
     const signIn = async (email: string, password: string):Promise<SignInResponse> => {
         try {
@@ -58,11 +59,13 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
         const initAuthContext = async () => {
             try {
                 const isAuthenticated = await checkAuth();
+                console.log("Is authenticated", isAuthenticated);
                 if (isAuthenticated) {
                     await fetchCurrentUser();
                     console.log("User is logged in", currentUser);
                 }else{
                     console.log("User is not logged in");
+                    signOut();
                 }
             } catch (e) {
                 console.error("Failed to fetch user during initialization:", e);
@@ -73,7 +76,7 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
         };
 
         initAuthContext();
-    }, []);
+    }, [pathname]);
 
     return(
         <AuthContext.Provider value={{currentUser, authInit, signIn, signOut}}>{children}</AuthContext.Provider>   

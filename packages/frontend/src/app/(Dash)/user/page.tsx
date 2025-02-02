@@ -7,7 +7,7 @@ import { DashBoard } from "@/container/dashboard";
 import { Header } from "@/container/header";
 import { AppShell, Box, Button, Modal, Select, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ActivityCreateRequest, APIException, Mission, PHASE } from "@shared/frontend";
+import { ActivityCreateRequest, APIException, MissionDetailed, PHASE } from "@shared/frontend";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -16,8 +16,8 @@ export default function UserPage(){
 
     const [showForm, setShowForm] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
-    const [currentMission, setCurrentMission] = useState<Mission | null>(null);
-    const [missions, setMissions] = useState<Mission[]>([]);
+    const [currentMission, setCurrentMission] = useState<MissionDetailed | null>(null);
+    const [missions, setMissions] = useState<MissionDetailed[]>([]);
     const [loading, setLoading] = useState(false);
 
     // Activity Form
@@ -41,6 +41,10 @@ export default function UserPage(){
                 missionId: currentMission?.id as number
             });
             const updatedMission = await ApiClient.Activity.getMissions();
+            if (currentMission) {
+                const mission_ = updatedMission.find(m => m.id === currentMission.id);
+                setCurrentMission(mission_ ? { ...mission_ } : null); // Trigger hierarchy update in MissionBlock
+            }
             setLoading(false);
             toast.success('Activity created successfully');
             setMissions(updatedMission);
@@ -53,16 +57,21 @@ export default function UserPage(){
             }
         }
     }
-    const missionCallBack = (mission: Mission) => {
+    const missionCallBack = (mission: MissionDetailed) => {
         setCurrentMission(mission);
         setShowInfo(true);
     }
 
-    useEffect(() => {
-        async function fetchMissions() {
-            const missions_: Mission[] = await ApiClient.Activity.getMissions();
-            setMissions(missions_);
+    const fetchMissions = async () => {
+        const missions_ = await ApiClient.Activity.getMissions();
+        setMissions([...missions_]);
+        if (currentMission) {
+            const updatedMission = missions_.find(m => m.id === currentMission.id);
+            setCurrentMission(updatedMission ? { ...updatedMission } : null); // Trigger hierarchy update in MissionBlock
         }
+    };
+
+    useEffect(() => {
         fetchMissions();
     }, []);
 
@@ -113,7 +122,7 @@ export default function UserPage(){
                     </Box>
                 </Modal>
                 {/* Mission Info */}
-                {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} />}
+                {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions} />}
             </AppShell.Main>
                 
         </AppShell>

@@ -37,8 +37,6 @@ export default function RootLayout({
       <body
         className={`
           ${geistSans.variable} ${geistMono.variable} antialiased 
-            bg-[url('/homepage.png')] bg-fill
-            h-screen w-screen backdrop-blur-md
           `}
       >
         <MantineProvider theme={theme}>
@@ -52,3 +50,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+// bg-[url('/homepage.png')] bg-fill
+// h-screen w-screen backdrop-blur-md

@@ -5,8 +5,8 @@ declare global {
     interface Request {
       securityContext?: {
         user: User;
-        cookies: string;
       };
+      cookies: string;
     }
   }
 }

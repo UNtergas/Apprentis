@@ -6,7 +6,9 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
 } from "@nestjs/common";
 import { ActivityService } from "./activity.service";
 import { Permissions } from "#/auth/decorators/permissions.decorator";
@@ -17,12 +19,16 @@ import {
 } from "#/auth/decorators/current-user.decorator";
 import {
   Activity,
+  ActivityCreate,
   ActivityCreateRequest,
+  ActivityUpdateRequest,
   Feedback,
   FeedbackCreate,
   Mission,
+  MissionDetailed,
   ResponseObject,
   ROLE,
+  SkillCreate,
 } from "@shared/backend";
 import { MissionService } from "#/mission/mission.service";
 
@@ -55,7 +61,7 @@ export class ActivityController {
   async getMissions(
     @CurrentUserID() userId: number,
     @CurrentUserRole() role: string,
-  ): Promise<ResponseObject<"missions", Mission[]>> {
+  ): Promise<ResponseObject<"missions", MissionDetailed[]>> {
     let missions: Mission[] = [];
     if (role === ROLE.STUDENT) {
       missions = (await this.missionService.findAll()).filter(
@@ -66,7 +72,21 @@ export class ActivityController {
         (mission) => mission.companyId === userId,
       );
     }
-    return { missions: missions };
+    const allSkills = await this.skillService.findAll();
+    const missionsDetailed: MissionDetailed[] = missions.map(
+      (mission: Mission) => ({
+        ...mission,
+        activitiesDetailed: mission.activities.map((activity: Activity) => ({
+          ...activity,
+          skillsDetailed: allSkills.filter((skill) =>
+            activity.skills.some(
+              (activitySkill) => activitySkill.skillId === skill.id,
+            ),
+          ),
+        })),
+      }),
+    );
+    return { missions: missionsDetailed };
   }
 
   @HttpCode(HttpStatus.OK)
@@ -80,5 +100,34 @@ export class ActivityController {
       ...body,
     });
     return { feedback };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Put(":id")
+  @Permissions(SecurityScope.ACTIVITY_WRITE)
+  async updateActivity(
+    @Body() body: ActivityUpdateRequest,
+    @Param("id") id: string,
+  ): Promise<ResponseObject<"activity", Activity>> {
+    const activity: Partial<ActivityCreate> = {
+      title: body.title,
+      description: body.description,
+      phase: body.phase,
+      missionId: body.missionId,
+    };
+    let skill: SkillCreate | undefined;
+    if (body.skillDescription && body.skillLevel && body.skillType) {
+      skill = {
+        description: body.skillDescription,
+        level: body.skillLevel,
+        type: body.skillType,
+      };
+    }
+    const updatedActivity = await this.activityService.updateOne(
+      parseInt(id),
+      activity,
+      skill,
+    );
+    return { activity: updatedActivity };
   }
 }

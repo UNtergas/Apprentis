@@ -1,4 +1,4 @@
-import { Activity } from "./activity.dto";
+import { Activity, ActivityDetailed } from "./activity.dto";
 import { SkillOnMission } from "./skillOnMission.dto";
 
 export class Mission {
@@ -11,7 +11,9 @@ export class Mission {
     skills : SkillOnMission[];
     activities: Activity[];
 }
-
+export type MissionDetailed = Mission & {
+    activitiesDetailed: ActivityDetailed[];
+}
 export type MissionCreate = Omit<Mission, 'id'|'skills'|'activities'>;
 
 export type MissionCreateRequest = Omit<Mission, 'id' | 'skills' | 'apprenticeId'|'companyId'|'activities'> & {

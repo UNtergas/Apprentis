@@ -11,7 +11,12 @@ export function ToasterProvider({children}: ToastProviderProps) {
     return(
         <>
             {children}
-            <ToastContainer />
+            <ToastContainer 
+                position="top-right"
+                autoClose={5000}
+                newestOnTop={true}
+                style={{zIndex: 9999}}
+            />
         </>
     )
 }
