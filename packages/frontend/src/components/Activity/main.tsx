@@ -10,7 +10,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { ActivityEdit } from "./activityEdit";
 import { ActivityDisplay } from "./activityDisplay";
-import { ActivityFeedback, FeedbackForm } from "./activityFeedback";
+import { FeedbackForm } from "./activityFeedback";
 import { SkillForm } from "./activitySkill";
 
 const PHASES = [
@@ -190,12 +190,6 @@ const ActivitySection = (
                                                     triggerFeedback={triggerFeedback}
                                                     />
                                                 )}
-                                                {/* Feedback Section */}
-                                                {/* <ActivityFeedback
-                                                    activity={activity}
-                                                    canLeaveFeedback={canLeaveFeedback}
-                                                    triggerFeedback={triggerFeedback}
-                                                /> */}
                                             </List.Item>
                                         ))}
                                     </List>

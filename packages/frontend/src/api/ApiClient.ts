@@ -1,4 +1,4 @@
-import { Activity, ActivityCreateRequest, ActivityUpdateRequest, APIException, Apprentice, Feedback, FeedbackCreate, FeedbackDetailed, Mission, MissionCreateRequest, MissionDetailed, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
+import { Activity, ActivityCreateRequest, ActivityUpdateRequest, APIException, Apprentice, ApprenticeDetailed, Feedback, FeedbackCreate, FeedbackDetailed, Mission, MissionCreateRequest, MissionDetailed, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
 
 
 class ApiClient{
@@ -120,9 +120,12 @@ class ApiClient{
   }
   static Apprentice = {
     getApprenticeInfo: async (): Promise<Apprentice> => {
-      const res = await ApiClient.sendRequest<"apprentice", Apprentice>('GET', '/api/apprentice/missions', undefined);
+      const res = await ApiClient.sendRequest<"apprentice", Apprentice>('GET', '/api/apprentice/', undefined);
       return res.apprentice;
-
+    },
+    getApprenticeByMission: async (): Promise<ApprenticeDetailed[]> => {
+      const res = await ApiClient.sendRequest<"apprentices", ApprenticeDetailed[]>('GET', '/api/apprentice/mission', undefined);
+      return res.apprentices;
     }
   }
 }

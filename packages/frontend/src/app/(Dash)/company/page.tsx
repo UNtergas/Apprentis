@@ -3,11 +3,12 @@
 import ApiClient from "@/api/ApiClient";
 import { useAuth } from "@/auth.context";
 import { MissionBlock } from "@/components/missionBlock";
-import { DashBoard } from "@/container/dashboard";
+import { DashBoardCompany } from "@/container/dashboardCompany";
+
 import { Header } from "@/container/header";
 import { AppShell, Box, Button, Modal, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { APIException, emailValidator, MissionCreateRequest, Mission, MissionDetailed } from "@shared/frontend";
+import { APIException, emailValidator, MissionCreateRequest, MissionDetailed } from "@shared/frontend";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -49,10 +50,6 @@ export default function CompanyPage(){
     };
 
     useEffect(() => {
-        // async function fetchMissions() {
-        //     const missions_ = await ApiClient.Activity.getMissions();
-        //     setMissions(missions_);
-        // }
         fetchMissions();
     }, []);
 
@@ -74,58 +71,63 @@ export default function CompanyPage(){
         }
     }
     return(
-        <AppShell 
-            header={{height: 50}} 
-            navbar={{width: 300, breakpoint: 'sm'}}
-            padding="md"
-        >
-            <AppShell.Header>
-                <Header />
-            </AppShell.Header>
-            <AppShell.Navbar>
-                <DashBoard missions={missions} formCallBack={() => setShowForm(true)} missionCallBack={missionCallBack} role={currentUser?.role} />
-            </AppShell.Navbar>
-            <AppShell.Main>
-                {/* Form Modal */}
-                <Modal opened={showForm} onClose={() => setShowForm(false)} title="Create New Mission" centered>
-                    <Box p="md">
-                        <form onSubmit={form.onSubmit(handleSubmit)}>
-                        <Stack gap="sm">
-
-                            <TextInput
-                            label="Title"
-                            placeholder="Enter mission title"
-                            {...form.getInputProps("title")}
-                            />
-
-                            <Textarea
-                            label="Description"
-                            placeholder="Enter mission description"
-                            {...form.getInputProps("description")}
-                            />
-
-                            <TextInput
-                            label="Semester"
-                            placeholder="e.g., Spring 2025"
-                            {...form.getInputProps("semester")}
-                            />
-
-                            <TextInput
-                            label="Apprentice Email"
-                            placeholder="apprentice@example.com"
-                            {...form.getInputProps("apprenticeEmail")}
-                            />
-
-                            <Button color="red.1" type="submit" loading={loading} fullWidth>
-                            Create Mission
-                            </Button>
-                        </Stack>
-                        </form>
-                    </Box>
-                </Modal>
-                {/* Mission Info */}
-                {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions}/>}
-            </AppShell.Main>
-        </AppShell>
+        <>{currentUser ? (
+            <AppShell 
+                header={{height: 50}} 
+                navbar={{width: 300, breakpoint: 'sm'}}
+                padding="md"
+            >
+                <AppShell.Header>
+                    <Header />
+                </AppShell.Header>
+                <AppShell.Navbar>
+                    <DashBoardCompany missions={missions} formCallBack={() => setShowForm(true)} missionCallBack={missionCallBack} role={currentUser.role} />
+                </AppShell.Navbar>
+                <AppShell.Main>
+                    {/* Form Modal */}
+                    <Modal opened={showForm} onClose={() => setShowForm(false)} title="Create New Mission" centered>
+                        <Box p="md">
+                            <form onSubmit={form.onSubmit(handleSubmit)}>
+                            <Stack gap="sm">
+    
+                                <TextInput
+                                label="Title"
+                                placeholder="Enter mission title"
+                                {...form.getInputProps("title")}
+                                />
+    
+                                <Textarea
+                                label="Description"
+                                placeholder="Enter mission description"
+                                {...form.getInputProps("description")}
+                                />
+    
+                                <TextInput
+                                label="Semester"
+                                placeholder="e.g., Spring 2025"
+                                {...form.getInputProps("semester")}
+                                />
+    
+                                <TextInput
+                                label="Apprentice Email"
+                                placeholder="apprentice@example.com"
+                                {...form.getInputProps("apprenticeEmail")}
+                                />
+    
+                                <Button color="red.1" type="submit" loading={loading} fullWidth>
+                                Create Mission
+                                </Button>
+                            </Stack>
+                            </form>
+                        </Box>
+                    </Modal>
+                    {/* Mission Info */}
+                    {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions}/>}
+                </AppShell.Main>
+            </AppShell>
+            ):(
+                <div>Unauthorized</div>
+            )}
+        </>
     )
 }

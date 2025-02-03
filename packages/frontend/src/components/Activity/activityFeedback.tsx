@@ -111,7 +111,3 @@ export const FeedbackForm = (
         </Modal>
     )
 }
-
-{/* <List.Item key={feedback.id}>
-    <em>{feedback.content}</em> <small>({new Date(feedback.createdAt).toLocaleDateString()})</small>
-</List.Item> */}

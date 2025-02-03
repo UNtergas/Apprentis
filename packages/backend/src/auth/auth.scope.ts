@@ -12,6 +12,7 @@ export enum SecurityScope {
   ACTIVITY_WRITE = "activity.write",
   FEEDBACK_READ = "feedback.read",
   FEEDBACK_WRITE = "feedback.write",
+  APPRENTICE_READ = "apprentice.read",
 }
 
 export const USER_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
@@ -35,6 +36,7 @@ export const COMPANY_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
   SecurityScope.ACTIVITY_READ,
   SecurityScope.FEEDBACK_WRITE,
   SecurityScope.FEEDBACK_READ,
+  SecurityScope.APPRENTICE_READ,
 ]);
 
 export const ADMIN_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([

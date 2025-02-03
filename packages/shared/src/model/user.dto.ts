@@ -1,6 +1,6 @@
 import { ApiProperty , ApiBody } from '@nestjs/swagger';
-import { Mission } from './mission.dto';
-import { Activity } from './activity.dto';
+import { Mission, MissionDetailed } from './mission.dto';
+import { Activity, ActivityDetailed } from './activity.dto';
 import { Feedback } from './feedback.dto';
 import { SkillValidation } from './skillValidation.dto';
 
@@ -39,6 +39,10 @@ export class Apprentice extends User {
   validatedCompetencies: SkillValidation[];
 }
 
+export type ApprenticeDetailed = Apprentice & {
+  mission_apprenticeDetailed: MissionDetailed[];
+}
+
 export class Company extends User {
   mission_company: Mission[];
   feedbacks: Feedback[];
@@ -49,4 +53,9 @@ export class Tutor extends User {
   validatorCompetencies: SkillValidation[];
   feedbacks: Feedback[];
 }
+
+export type TutorDetailed = Tutor & {
+  apprenticesDetailed: ApprenticeDetailed[];
+}
+
 
