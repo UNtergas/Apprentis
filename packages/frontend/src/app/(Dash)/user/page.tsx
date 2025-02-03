@@ -77,8 +77,8 @@ export default function UserPage(){
 
     return(
         <AppShell
-            header={{height: 50}}
-            navbar={{width: 300, breakpoint: 'sm'}}
+            header={{height: 60}}
+            navbar={{width: 320, breakpoint: 'sm'}}
             padding="md"
         >
             <AppShell.Header>

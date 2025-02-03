@@ -2,6 +2,7 @@
 
 import ApiClient from "@/api/ApiClient";
 import { useAuth } from "@/auth.context";
+import { ApprenticeEmailSearch } from "@/components/apprenticeMailSearch";
 import { MissionBlock } from "@/components/missionBlock";
 import { DashBoardCompany } from "@/container/dashboardCompany";
 
@@ -21,10 +22,8 @@ export default function CompanyPage(){
     const [missions, setMissions] = useState<MissionDetailed[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const missionCallBack = (mission: MissionDetailed) => {
-        setCurrentMission(mission);
-        setShowInfo(true);
-    }
+    
+
     // Mission Info
     const form = useForm({
         initialValues: {
@@ -53,6 +52,11 @@ export default function CompanyPage(){
         fetchMissions();
     }, []);
 
+    const missionCallBack = (mission: MissionDetailed) => {
+        setCurrentMission(mission);
+        setShowInfo(true);
+    }
+
     const handleSubmit = async (values: MissionCreateRequest) => {
         try{
             setLoading(true);
@@ -73,8 +77,8 @@ export default function CompanyPage(){
     return(
         <>{currentUser ? (
             <AppShell 
-                header={{height: 50}} 
-                navbar={{width: 300, breakpoint: 'sm'}}
+                header={{height: 60}} 
+                navbar={{width: 320, breakpoint: 'sm'}}
                 padding="md"
             >
                 <AppShell.Header>
@@ -107,11 +111,9 @@ export default function CompanyPage(){
                                 placeholder="e.g., Spring 2025"
                                 {...form.getInputProps("semester")}
                                 />
-    
-                                <TextInput
-                                label="Apprentice Email"
-                                placeholder="apprentice@example.com"
-                                {...form.getInputProps("apprenticeEmail")}
+                                
+                                <ApprenticeEmailSearch
+                                    form={form}
                                 />
     
                                 <Button color="red.1" type="submit" loading={loading} fullWidth>

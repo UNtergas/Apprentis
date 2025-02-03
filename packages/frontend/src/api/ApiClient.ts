@@ -126,6 +126,10 @@ class ApiClient{
     getApprenticeByMission: async (): Promise<ApprenticeDetailed[]> => {
       const res = await ApiClient.sendRequest<"apprentices", ApprenticeDetailed[]>('GET', '/api/apprentice/mission', undefined);
       return res.apprentices;
+    },
+    getApprenticesEmails: async (email: string): Promise<string[]> => {
+      const res = await ApiClient.sendRequest<"emails", string[]>('GET', `/api/apprentice/emails?email=${email}`, undefined);
+      return res.emails;
     }
   }
 }

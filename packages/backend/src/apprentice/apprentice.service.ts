@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Apprentice } from "@shared/backend";
+import { Apprentice, ROLE } from "@shared/backend";
 import PRISMA from "../../prisma";
 @Injectable()
 export class ApprenticeService {
@@ -53,6 +53,18 @@ export class ApprenticeService {
         },
         validatedCompetencies: true,
       },
+    });
+  }
+  async findManyBySearch(search: string): Promise<{ email: string }[]> {
+    return PRISMA.user.findMany({
+      where: {
+        role: ROLE.STUDENT,
+        email: {
+          contains: search,
+          mode: "insensitive",
+        },
+      },
+      select: { email: true },
     });
   }
 

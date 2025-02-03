@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, HttpCode } from "@nestjs/common";
+import { Controller, Get, HttpStatus, HttpCode, Query } from "@nestjs/common";
 import { ApprenticeService } from "./apprentice.service";
 import { SecurityScope } from "#/auth/auth.scope";
 import { Permissions } from "#/auth/decorators/permissions.decorator";
@@ -30,6 +30,17 @@ export class ApprenticeController {
   ): Promise<ResponseObject<"apprentice", Apprentice>> {
     const apprentice = await this.apprenticeService.findOneById(userId);
     return { apprentice };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get("emails")
+  @Permissions(SecurityScope.APPRENTICE_READ)
+  async getApprenticesEmails(
+    @Query("email") email: string,
+  ): Promise<ResponseObject<"emails", string[]>> {
+    const apprentices = await this.apprenticeService.findManyBySearch(email);
+    const emails = apprentices.map((apprentice) => apprentice.email);
+    return { emails };
   }
 
   @HttpCode(HttpStatus.OK)

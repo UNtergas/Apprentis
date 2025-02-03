@@ -1,4 +1,4 @@
-import { Group, Code, ScrollArea, List, Button } from "@mantine/core";
+import { Group, Code, ScrollArea, List, Button, Divider } from "@mantine/core";
 import { IconBackpack, IconBook, IconBuildings, IconDirectionSign, IconLicense, IconPencil, IconProgressCheck, IconSchool, IconUser } from "@tabler/icons-react";
 import classes from "@/styles/dashboard.module.css";
 import { ApprenticeDetailed, MissionDetailed, PHASE, ROLE, Role } from "@shared/frontend";
@@ -69,11 +69,15 @@ export function DashBoardCompany({ missions = [], formCallBack, missionCallBack,
           </Group>
         </div>
   
-        <ScrollArea className={classes.links} scrollbarSize={10}>
-            <List >
+        <Button color="gray.3" onClick={formCallBack} mt="xs" mb="xs">
+            <IconLicense/> Create Mission
+        </Button>
+        <Divider />
+        <ScrollArea className={classes.links}>
+            <List style={{width: "100%"}}>
                 {
                     apprentices.map((apprentice) => (
-                        <List.Item key={apprentice.id} mt="xs">
+                        <List.Item key={apprentice.id} mt="xs" w="100%" display="block">
                             <LinksGroup 
                                 icon={IconUser} 
                                 label={apprentice.email} 
@@ -85,9 +89,6 @@ export function DashBoardCompany({ missions = [], formCallBack, missionCallBack,
                 }
             </List>
         </ScrollArea>
-        <Button color="gray.3" onClick={formCallBack} mt="xs">
-            <IconLicense/> Create Mission
-        </Button>
       </nav>
     );
   }

@@ -2,7 +2,7 @@
 
 import ApiClient from "@/api/ApiClient";
 import { useAuth } from "@/auth.context";
-import { Accordion, List, Title } from "@mantine/core";
+import { Accordion, Stack, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { APIException, Phase, PHASE, ROLE, Activity, LEVEL, skillPhaseMapping, SkillCreate, Level, MissionDetailed, ActivityDetailed } from "@shared/frontend";
 import { IconBook, IconDirectionSign, IconProgressCheck } from "@tabler/icons-react";
@@ -169,9 +169,10 @@ const ActivitySection = (
                                 <Accordion.Control>{icon}{phase}</Accordion.Control>
                                 <Accordion.Panel>
                                     {phaseActivities.length > 0 ? (
-                                    <List spacing="xs">
+                                    <Stack align="stretch" justify="center">
                                         {phaseActivities.map((activity:ActivityDetailed,index) => (
-                                            <List.Item key={index}>
+                                            <div key={index}
+                                            >
                                                 {
                                                 isEditActivity && editActivity?.id === activity.id ? (
                                                     <ActivityEdit
@@ -190,9 +191,9 @@ const ActivitySection = (
                                                     triggerFeedback={triggerFeedback}
                                                     />
                                                 )}
-                                            </List.Item>
+                                            </div>
                                         ))}
-                                    </List>
+                                    </Stack>
                                     ):(
                                         <p>No activities for this phase.</p>
                                     )}
@@ -225,3 +226,21 @@ const ActivitySection = (
 }
 
 export default ActivitySection;
+
+
+
+// key={index} 
+// style={{
+//     width: "100%", // Ensure the child spans the full width
+//     display: "block", // Ensure the child spans the full width
+//     backgroundColor: "lightblue", // For debugging
+// }}
+// <div
+// style={{
+// width: "100%", // Ensure the child spans the full width
+// backgroundColor: "lightgreen", // For debugging
+// }}
+// >
+// alacadabra sdasdadadadasddddddddddddddd
+// </div>
+// </List.Item>

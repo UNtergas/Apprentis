@@ -90,31 +90,3 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, level=0,
     </>
   );
 }
-
-// Example callback functions
-const handleClick1 = () => alert("Clicked Link 1");
-const handleClick2 = () => alert("Clicked Link 2");
-
-const mockdata: LinkItem = {
-  label: "Group1",
-  icon: IconChevronRight,
-  links: [
-    {
-      label: "Group2",
-      links: [
-        { label: "Link1", link: "/link1", callback: handleClick1 },
-        { label: "Link2", link: "/link2", callback: handleClick2 },
-      ],
-    },
-    { label: "Link3", callback: () => console.log("Clicked Link 3") },
-    { label: "Link4" },
-  ],
-};
-
-export function NavbarLinksGroup() {
-  return (
-    <Box mih={220} p="md">
-      <LinksGroup icon={IconChevronRight} label="Main Group" links={[mockdata]} />
-    </Box>
-  );
-}

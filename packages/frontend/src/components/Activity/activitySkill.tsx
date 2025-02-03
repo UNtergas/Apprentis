@@ -1,6 +1,6 @@
 import { Button, Modal, Select, Stack, Textarea } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { Activity, LEVEL, Phase, SkillCreate, skillPhaseMapping } from "@shared/frontend";
+import { LEVEL, Phase, SkillCreate, skillPhaseMapping } from "@shared/frontend";
 
 interface FeedbackFormProps {
     showForm: boolean;
@@ -46,11 +46,11 @@ export const SkillForm = (
     )
 }
 
-interface SkillDisplayProps {
-    activity: Activity;
-    canEditActivity: boolean;
-    startEditActivity: (activity: Activity) => void;
-}
+// interface SkillDisplayProps {
+//     activity: Activity;
+//     canEditActivity: boolean;
+//     startEditActivity: (activity: Activity) => void;
+// }
 
 // export const SkillDisplay =(
 

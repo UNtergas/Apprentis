@@ -80,7 +80,7 @@ export function DashBoard({ missions = [], formCallBack, missionCallBack, role }
         </div>
   
         <ScrollArea className={classes.links}>
-           <LinksGroup icon={IconLicense} label="Missions" links={missionLinks} initiallyOpened />
+           <LinksGroup icon={IconLicense} label="My missions" links={missionLinks} initiallyOpened />
         </ScrollArea>
       </nav>
     );

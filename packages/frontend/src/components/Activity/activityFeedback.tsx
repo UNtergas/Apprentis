@@ -35,9 +35,9 @@ export const ActivityFeedback = (
         fetchFeedbacks();
     },[activity])
     return(
-        <Accordion chevronPosition="left" variant="contained">
-            <Accordion.Control icon={<IconBubbleText/>}>
-                <Text mt="xs" fw={700}> Feedbacks</Text>
+        <Accordion chevronPosition="left" variant="contained" chevron={<IconBubbleText/>}>
+            <Accordion.Control >
+                <Text fw={700}> Feedbacks</Text>
             </Accordion.Control>
             <Accordion.Panel>
            {/* Feedback Section */}
