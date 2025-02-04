@@ -13,7 +13,11 @@ export class ActivityService {
       include: {
         skills: {
           include: {
-            skill: true,
+            skill: {
+              include: {
+                validation: true,
+              },
+            },
           },
         },
         feedbacks: true,
@@ -29,7 +33,11 @@ export class ActivityService {
       include: {
         skills: {
           include: {
-            skill: true,
+            skill: {
+              include: {
+                validation: true,
+              },
+            },
           },
         },
         feedbacks: true,
@@ -45,7 +53,11 @@ export class ActivityService {
       include: {
         skills: {
           include: {
-            skill: true,
+            skill: {
+              include: {
+                validation: true,
+              },
+            },
           },
         },
         feedbacks: true,
@@ -79,7 +91,11 @@ export class ActivityService {
       include: {
         skills: {
           include: {
-            skill: true,
+            skill: {
+              include: {
+                validation: true,
+              },
+            },
           },
         },
         feedbacks: true,

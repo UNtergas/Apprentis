@@ -14,6 +14,7 @@ import { SkillService } from "./skill/skill.service";
 import { CompanyController } from "./company/company.controller";
 import { CompanyService } from "./company/company.service";
 import { CompanyModule } from "./company/company.module";
+import { SkillValidationService } from "./skill/skill-validation.service";
 
 @Module({
   imports: [AuthModule, ApprenticeModule, ActivityModule, CompanyModule],
@@ -27,6 +28,7 @@ import { CompanyModule } from "./company/company.module";
     FeedbackService,
     SkillService,
     CompanyService,
+    SkillValidationService,
   ],
 })
 export class AppModule {}

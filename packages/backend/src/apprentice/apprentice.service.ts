@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Apprentice, ROLE } from "@shared/backend";
+import { Apprentice, ApprenticeUpdate, ROLE } from "@shared/backend";
 import PRISMA from "../../prisma";
 @Injectable()
 export class ApprenticeService {
@@ -72,6 +72,37 @@ export class ApprenticeService {
     return PRISMA.user.findUnique({
       where: {
         email: email,
+      },
+      include: {
+        mission_apprentice: {
+          include: {
+            skills: true,
+            activities: {
+              include: {
+                feedbacks: true,
+                skills: true,
+              },
+            },
+          },
+        },
+        activities: {
+          include: {
+            skills: true,
+            feedbacks: true,
+          },
+        },
+        validatedCompetencies: true,
+      },
+    });
+  }
+
+  async updateOne(id: number, data: ApprenticeUpdate): Promise<Apprentice> {
+    return PRISMA.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        ...data,
       },
       include: {
         mission_apprentice: {

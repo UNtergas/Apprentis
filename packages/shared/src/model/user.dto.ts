@@ -38,6 +38,7 @@ export class Apprentice extends User {
   activities: Activity[];
   validatedCompetencies: SkillValidation[];
 }
+export type ApprenticeUpdate = Partial<Omit<Apprentice, 'id' | 'mission_apprentice' | 'activities' | 'validatedCompetencies'| 'role'>>;
 
 export type ApprenticeDetailed = Apprentice & {
   mission_apprenticeDetailed: MissionDetailed[];

@@ -12,3 +12,4 @@ export type FeedbackDetailed = Feedback & {
     senderRole: Role;
 };
 export type FeedbackCreate = Omit<Feedback, 'id'|'createdAt'>;
+export type FeedbackCreateRequest = Omit<FeedbackCreate, 'senderId'>;

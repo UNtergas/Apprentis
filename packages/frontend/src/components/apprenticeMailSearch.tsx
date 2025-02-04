@@ -1,17 +1,20 @@
 import ApiClient from "@/api/ApiClient";
 import useDebounce from "@/hooks/useDebounce";
 import { Box, Loader, Popover, ScrollArea, Text, TextInput, UnstyledButton } from "@mantine/core";
-import { UseFormReturnType } from "@mantine/form"
-import { APIException, MissionCreateRequest } from "@shared/frontend";
+import { APIException } from "@shared/frontend";
 import { IconSearch } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
+
+
 interface ApprenticeEmailSearchProps {
-    form: UseFormReturnType<MissionCreateRequest>;
+    // form: UseFormReturnType<MissionCreateRequest | {apprenticeEmail: string}>;
+    setFormApprenticeEmail: (value: string) => void;
+
 }
 export const ApprenticeEmailSearch = (
-    {form}: ApprenticeEmailSearchProps
+    {setFormApprenticeEmail}: ApprenticeEmailSearchProps
 ) => {
     const viewportRef = useRef<HTMLDivElement>(null);
     const [search, setSearch] = useState("");
@@ -78,7 +81,8 @@ export const ApprenticeEmailSearch = (
       if (event.key === "Enter" && hovered >= 0) {
         event.preventDefault();
         setSearch(apprenticesEmail[hovered]); // Set selected email
-        form.setFieldValue("apprenticeEmail", apprenticesEmail[hovered]); // Update form
+        // form.setFieldValue("apprenticeEmail", apprenticesEmail[hovered]);
+        setFormApprenticeEmail(apprenticesEmail[hovered]);
         setOpened(false);
       }
     };
@@ -93,7 +97,8 @@ export const ApprenticeEmailSearch = (
         p={5}
         onClick={() => {
           setSearch(email);
-          form.setFieldValue("apprenticeEmail", email);
+          // form.setFieldValue("apprenticeEmail", email);
+          setFormApprenticeEmail(email);
           setOpened(false);
         }}
       >

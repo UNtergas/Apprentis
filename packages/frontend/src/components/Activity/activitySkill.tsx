@@ -1,8 +1,8 @@
 import { Button, Modal, Select, Stack, Textarea } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { LEVEL, Phase, SkillCreate, skillPhaseMapping } from "@shared/frontend";
+import { Level, LEVEL, Phase, SkillCreate, skillPhaseMapping, SkillValidationCreate } from "@shared/frontend";
 
-interface FeedbackFormProps {
+interface SkillFormProps {
     showForm: boolean;
     setShowForm: (show: boolean) => void;
     loading: boolean;
@@ -12,7 +12,7 @@ interface FeedbackFormProps {
 }
 
 export const SkillForm = (
-    {showForm, setShowForm, loading, handleSubmit, form, currentPhase}: FeedbackFormProps
+    {showForm, setShowForm, loading, handleSubmit, form, currentPhase}:SkillFormProps
 ) => {
     return(
         <Modal opened={showForm} onClose={() => setShowForm(false)} title="Add Skill To Activity" centered>
@@ -39,6 +39,37 @@ export const SkillForm = (
                     />
                     <Button color="red.1" type="submit" loading={loading} fullWidth>
                         Add skill
+                    </Button>
+                </Stack>
+            </form>
+        </Modal>
+    )
+}
+
+
+interface SkillValidationFormProps {
+    showForm: boolean;
+    setShowForm: (show: boolean) => void;
+    loading: boolean;
+    handleSubmit: (values: {validatedLevel: Level}) => void;
+    form: UseFormReturnType<{validatedLevel: Level}>;
+}
+export const SkillValidationForm = (
+    {showForm, setShowForm, loading, handleSubmit, form}:SkillValidationFormProps
+)=>{
+    return(
+        <Modal opened={showForm} onClose={() => setShowForm(false)} title="Add Skill Validation" centered>
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+                <Stack gap="sm">
+                    <Select
+                        label="Skill Level"
+                        placeholder="Select skill level"
+                        data={[LEVEL.BASIC, LEVEL.INTERMEDIATE, LEVEL.ADVANCED, LEVEL.EXPERT]}
+                        defaultValue={LEVEL.BASIC}
+                        {...form.getInputProps("validatedLevel")}
+                    />
+                    <Button color="red.1" type="submit" loading={loading} fullWidth>
+                        Add validation
                     </Button>
                 </Stack>
             </form>

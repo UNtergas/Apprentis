@@ -4,14 +4,14 @@ import ApiClient from "@/api/ApiClient";
 import { useAuth } from "@/auth.context";
 import { Accordion, Stack, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { APIException, Phase, PHASE, ROLE, Activity, LEVEL, skillPhaseMapping, SkillCreate, Level, MissionDetailed, ActivityDetailed } from "@shared/frontend";
+import { APIException, Phase, PHASE, ROLE, Activity, LEVEL, skillPhaseMapping, SkillCreate, Level, MissionDetailed, ActivityDetailed, Skill } from "@shared/frontend";
 import { IconBook, IconDirectionSign, IconProgressCheck } from "@tabler/icons-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ActivityEdit } from "./activityEdit";
 import { ActivityDisplay } from "./activityDisplay";
 import { FeedbackForm } from "./activityFeedback";
-import { SkillForm } from "./activitySkill";
+import { SkillForm, SkillValidationForm } from "./activitySkill";
 
 const PHASES = [
     {phase: PHASE.STUDY, icon: <IconBook/>}, 
@@ -31,16 +31,18 @@ const ActivitySection = (
     const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
     const [showSkillForm, setShowSkillForm] = useState(false);
-
+    const [showValidationForm, setShowValidationForm] = useState(false);
     // Current Action state
     const [currentActivity, setCurrentActivity] = useState<ActivityDetailed | null>(null);
     const [isEditActivity, setIsEditActivity] = useState(false);
     const [editActivity, setEditActivity] = useState<ActivityDetailed | null>(null);
-
+    const [currentSkill, setCurrentSkill] = useState<Skill | null>(null);
+    const [currentPhase, setCurrentPhase] = useState<Phase>(PHASE.STUDY);
     // Authroization
     const role = currentUser?.role;
     const canLeaveFeedback = (role === ROLE.COMPANY || role === ROLE.TUTOR);
     const canEditActivity = (role === ROLE.STUDENT);
+    const canValidateSkill = (role === ROLE.TUTOR);
     // Function to filter activities by phase
     const getActivitiesByPhase = (phase:Phase) => 
         mission.activitiesDetailed.filter(activity => activity.phase === phase);
@@ -61,7 +63,6 @@ const ActivitySection = (
             if (currentUser && currentActivity) {
             await ApiClient.Activity.createFeedback({
                 content: values.content,
-                senderId: currentUser.id,
                 activityId: currentActivity.id,
             });
             toast.success('Feedback created successfully');
@@ -118,16 +119,56 @@ const ActivitySection = (
             toast.warn("Current user or activity is not available.");
         }
     }
-    // Buttons Callbacks
+
+    //Skill Validation Form
+
+    const skillValidationForm = useForm({
+        initialValues: {
+            validatedLevel: LEVEL.BASIC as Level,
+        }
+    })
+
+    const handleSkillValidationSubmit = async (values: {validatedLevel:Level}) => {
+        try{
+            if (currentUser && currentActivity && currentSkill) {
+                await ApiClient.Activity.createValidation({
+                    apprenticeId: currentActivity.apprenticeId,
+                    skillId: currentSkill.id,
+                    validatedLevel: values.validatedLevel,
+                });
+                toast.success('Skill validated successfully');
+                setShowValidationForm(false);
+                await reloadMissions();
+                skillValidationForm.reset();
+                setLoading(false);
+            } else {
+                toast.warn("Current user or activity is not available.");
+            }
+        }catch(e){
+            if(e instanceof APIException){
+                toast.warn(e.message);
+            }
+        }
+    }
+
+
+    // Form triggers
     const triggerFeedback = (activity:ActivityDetailed) => {
         setCurrentActivity(activity);
         setShowForm(true);
     }
-    const triggerSkill = (activity:ActivityDetailed) => {
+    const triggerSkill = (activity:ActivityDetailed, phase: Phase) => {
+        setCurrentPhase(phase);
         setCurrentActivity(activity);
         setShowSkillForm(true);
     }
+    const triggerValidation = (activity:ActivityDetailed, skill: Skill) => {
+        setCurrentSkill(skill);
+        setCurrentActivity(activity);
+        setShowValidationForm(true);
+    }
 
+    /// Edit Activity
     const startEditActivity = (activity:ActivityDetailed) => {
         setEditActivity(activity);
         setIsEditActivity(true);
@@ -157,8 +198,9 @@ const ActivitySection = (
         }
     }
 
-    return(
-        <>
+    return(    
+        <>{currentUser ? (    
+        <div>
             <Title order={5} mt="md">Activities</Title>
             <Accordion variant="contained" mt="sm">
                 {PHASES.map(
@@ -187,8 +229,11 @@ const ActivitySection = (
                                                     canEditActivity={canEditActivity}
                                                     startEditActivity={startEditActivity}
                                                     triggerSkill={triggerSkill}
+                                                    phase={phase}
                                                     canLeaveFeedback={canLeaveFeedback}
                                                     triggerFeedback={triggerFeedback}
+                                                    canValidateSkill={canValidateSkill}
+                                                    triggerValidation={triggerValidation}
                                                     />
                                                 )}
                                             </div>
@@ -219,28 +264,20 @@ const ActivitySection = (
                 loading={loading}
                 handleSubmit={handleSkillFormSubmit}
                 form={skillForm}
-                currentPhase={PHASE.STUDY}
+                currentPhase={currentPhase}
             />
+            {/* Skill Validation Form */}
+            <SkillValidationForm
+                showForm={showValidationForm}
+                setShowForm={setShowValidationForm}
+                loading={loading}
+                handleSubmit={handleSkillValidationSubmit}
+                form={skillValidationForm}
+            />
+        </div>):(
+                <div>Unauthorized</div>
+            )}
         </>
     )
-}
-
+};
 export default ActivitySection;
-
-
-
-// key={index} 
-// style={{
-//     width: "100%", // Ensure the child spans the full width
-//     display: "block", // Ensure the child spans the full width
-//     backgroundColor: "lightblue", // For debugging
-// }}
-// <div
-// style={{
-// width: "100%", // Ensure the child spans the full width
-// backgroundColor: "lightgreen", // For debugging
-// }}
-// >
-// alacadabra sdasdadadadasddddddddddddddd
-// </div>
-// </List.Item>

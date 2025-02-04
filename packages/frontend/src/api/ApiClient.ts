@@ -1,4 +1,23 @@
-import { Activity, ActivityCreateRequest, ActivityUpdateRequest, APIException, Apprentice, ApprenticeDetailed, Feedback, FeedbackCreate, FeedbackDetailed, Mission, MissionCreateRequest, MissionDetailed, RegisterDTO, ResponseObject, SignInResponse, User } from '@shared/frontend';
+import { 
+  Activity, 
+  ActivityCreateRequest, 
+  ActivityUpdateRequest, 
+  APIException, 
+  Apprentice, 
+  ApprenticeDetailed, 
+  Feedback, 
+  FeedbackCreateRequest, 
+  FeedbackDetailed, 
+  Mission, 
+  MissionCreateRequest, 
+  MissionDetailed, 
+  RegisterDTO, 
+  ResponseObject, 
+  SignInResponse, 
+  SkillValidation, 
+  SkillValidationCreate, 
+  User 
+} from '@shared/frontend';
 
 
 class ApiClient{
@@ -103,14 +122,18 @@ class ApiClient{
       const res = await ApiClient.sendRequest<"activity", Activity>('POST', '/api/activity', data);
       return res.activity;
     },
-    createFeedback: async (data: FeedbackCreate): Promise<Feedback> => {
+    createFeedback: async (data: FeedbackCreateRequest): Promise<Feedback> => {
       const res = await ApiClient.sendRequest<"feedback", Feedback>('POST', '/api/activity/feedback', data);
       return res.feedback;
+    },
+    createValidation: async (data: SkillValidationCreate): Promise<SkillValidation> => {
+      const res = await ApiClient.sendRequest<"validation", SkillValidation>('POST', '/api/activity/validation', data);
+      return res.validation;
     },
     updateActivity: async (id: number, data: ActivityUpdateRequest | null = null): Promise<Activity> => {
       const res = await ApiClient.sendRequest<"activity", Activity>('PUT', `/api/activity/${id}`, data);
       return res.activity;
-    }
+    },
   }
   static Company = {
     createMission: async (data: MissionCreateRequest): Promise<Mission> => {
@@ -130,6 +153,15 @@ class ApiClient{
     getApprenticesEmails: async (email: string): Promise<string[]> => {
       const res = await ApiClient.sendRequest<"emails", string[]>('GET', `/api/apprentice/emails?email=${email}`, undefined);
       return res.emails;
+    },
+    setTutorat: async (email: string): Promise<Apprentice> => {
+      console.log("query",email);
+      const res = await ApiClient.sendRequest<"apprentice", Apprentice>('POST', '/api/apprentice/tutor', { apprenticeEmail: email });
+      return res.apprentice;
+    },
+    getApprenticesByTutor: async (): Promise<ApprenticeDetailed[]> => {
+      const res = await ApiClient.sendRequest<"apprentices", ApprenticeDetailed[]>('GET', '/api/apprentice/tutor', undefined);
+      return res.apprentices;
     }
   }
 }

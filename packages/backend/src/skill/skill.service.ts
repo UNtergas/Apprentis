@@ -13,6 +13,7 @@ export class SkillService {
       include: {
         activities: true,
         missions: true,
+        validation: true,
       },
     });
   }
@@ -25,6 +26,7 @@ export class SkillService {
       include: {
         activities: true,
         missions: true,
+        validation: true,
       },
     });
   }
@@ -37,6 +39,7 @@ export class SkillService {
       include: {
         activities: true,
         missions: true,
+        validation: true,
       },
     });
   }

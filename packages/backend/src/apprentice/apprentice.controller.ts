@@ -1,4 +1,14 @@
-import { Controller, Get, HttpStatus, HttpCode, Query } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  HttpCode,
+  Query,
+  Post,
+  Body,
+  NotFoundException,
+  ConflictException,
+} from "@nestjs/common";
 import { ApprenticeService } from "./apprentice.service";
 import { SecurityScope } from "#/auth/auth.scope";
 import { Permissions } from "#/auth/decorators/permissions.decorator";
@@ -52,6 +62,49 @@ export class ApprenticeController {
     const missions = (await this.missionService.findAll()).filter(
       (mission) => mission.companyId === userId,
     );
+    const apprenticeByMission = await this.mapAprrenticeToMission(missions);
+    return { apprentices: apprenticeByMission };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("tutor")
+  @Permissions(SecurityScope.APPRENTICE_WRITE)
+  async setTutor(
+    @CurrentUserID() userId: number,
+    @Body("apprenticeEmail") apprenticeEmail: string,
+  ): Promise<ResponseObject<"apprentice", Apprentice>> {
+    const oldApprentice =
+      await this.apprenticeService.findOneByEmail(apprenticeEmail);
+    if (!oldApprentice) {
+      throw new NotFoundException("Apprentice not found");
+    }
+    if (oldApprentice.tutorId) {
+      throw new ConflictException("Apprentice already has a tutor");
+    }
+    const apprentice = await this.apprenticeService.updateOne(
+      oldApprentice.id,
+      {
+        tutorId: userId,
+      },
+    );
+    return { apprentice };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get("tutor")
+  @Permissions(SecurityScope.APPRENTICE_READ)
+  async getApprenticesByTutor(
+    @CurrentUserID() userId: number,
+  ): Promise<ResponseObject<"apprentices", ApprenticeDetailed[]>> {
+    const missions = await this.missionService.findAll();
+    const apprenticeByMission = await this.mapAprrenticeToMission(missions);
+    const apprentices = apprenticeByMission.filter(
+      (apprentice) => apprentice.tutorId === userId,
+    );
+    return { apprentices };
+  }
+
+  private async mapAprrenticeToMission(missions: Mission[]) {
     const allSkills = await this.skillService.findAll();
     const missionsDetailed: MissionDetailed[] = missions.map(
       (mission: Mission) => ({
@@ -83,6 +136,6 @@ export class ApprenticeController {
         ),
       ),
     }));
-    return { apprentices: apprenticeByMission };
+    return apprenticeByMission;
   }
 }

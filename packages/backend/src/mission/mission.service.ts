@@ -15,7 +15,15 @@ export class MissionService {
         activities: {
           include: {
             feedbacks: true,
-            skills: true,
+            skills: {
+              include: {
+                skill: {
+                  include: {
+                    validation: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -32,7 +40,15 @@ export class MissionService {
         activities: {
           include: {
             feedbacks: true,
-            skills: true,
+            skills: {
+              include: {
+                skill: {
+                  include: {
+                    validation: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -49,7 +65,15 @@ export class MissionService {
         activities: {
           include: {
             feedbacks: true,
-            skills: true,
+            skills: {
+              include: {
+                skill: {
+                  include: {
+                    validation: true,
+                  },
+                },
+              },
+            },
           },
         },
       },

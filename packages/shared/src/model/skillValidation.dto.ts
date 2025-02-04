@@ -9,3 +9,5 @@ export class SkillValidation {
     validatorId : number;
     skillId : number;
 }
+
+export type SkillValidationCreate = Pick <SkillValidation, 'validatedLevel' | 'skillId' | 'apprenticeId'>;

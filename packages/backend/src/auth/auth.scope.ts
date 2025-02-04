@@ -13,6 +13,9 @@ export enum SecurityScope {
   FEEDBACK_READ = "feedback.read",
   FEEDBACK_WRITE = "feedback.write",
   APPRENTICE_READ = "apprentice.read",
+  APPRENTICE_WRITE = "apprentice.write",
+  VALIDATION_WRITE = "validation.write",
+  VALIDATION_READ = "validation.read",
 }
 
 export const USER_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
@@ -27,6 +30,7 @@ export const APPRENTICE_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
   SecurityScope.ACTIVITY_READ,
   SecurityScope.ACTIVITY_WRITE,
   SecurityScope.FEEDBACK_READ,
+  SecurityScope.VALIDATION_READ,
 ]);
 
 export const COMPANY_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
@@ -37,6 +41,19 @@ export const COMPANY_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
   SecurityScope.FEEDBACK_WRITE,
   SecurityScope.FEEDBACK_READ,
   SecurityScope.APPRENTICE_READ,
+  SecurityScope.VALIDATION_READ,
+]);
+
+export const TUTOR_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
+  ...USER_SCOPES,
+  SecurityScope.MISSION_READ,
+  SecurityScope.ACTIVITY_READ,
+  SecurityScope.FEEDBACK_READ,
+  SecurityScope.FEEDBACK_WRITE,
+  SecurityScope.APPRENTICE_READ,
+  SecurityScope.APPRENTICE_WRITE,
+  SecurityScope.VALIDATION_READ,
+  SecurityScope.VALIDATION_WRITE,
 ]);
 
 export const ADMIN_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
@@ -52,6 +69,8 @@ export function getScopesBasedOnUserRole(userRole: Role): Set<SecurityScope> {
     return COMPANY_SCOPES;
   } else if (userRole === ROLE.STUDENT) {
     return APPRENTICE_SCOPES;
+  } else if (userRole === ROLE.TUTOR) {
+    return TUTOR_SCOPES;
   }
   return USER_SCOPES;
 }

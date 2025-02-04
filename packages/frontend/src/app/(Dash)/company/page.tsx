@@ -2,12 +2,11 @@
 
 import ApiClient from "@/api/ApiClient";
 import { useAuth } from "@/auth.context";
-import { ApprenticeEmailSearch } from "@/components/apprenticeMailSearch";
-import { MissionBlock } from "@/components/missionBlock";
+import { MissionBlock, MissionForm } from "@/components/missionBlock";
 import { DashBoardCompany } from "@/container/dashboardCompany";
 
 import { Header } from "@/container/header";
-import { AppShell, Box, Button, Modal, Stack, Textarea, TextInput } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { APIException, emailValidator, MissionCreateRequest, MissionDetailed } from "@shared/frontend";
 import { useEffect, useState } from "react";
@@ -89,40 +88,13 @@ export default function CompanyPage(){
                 </AppShell.Navbar>
                 <AppShell.Main>
                     {/* Form Modal */}
-                    <Modal opened={showForm} onClose={() => setShowForm(false)} title="Create New Mission" centered>
-                        <Box p="md">
-                            <form onSubmit={form.onSubmit(handleSubmit)}>
-                            <Stack gap="sm">
-    
-                                <TextInput
-                                label="Title"
-                                placeholder="Enter mission title"
-                                {...form.getInputProps("title")}
-                                />
-    
-                                <Textarea
-                                label="Description"
-                                placeholder="Enter mission description"
-                                {...form.getInputProps("description")}
-                                />
-    
-                                <TextInput
-                                label="Semester"
-                                placeholder="e.g., Spring 2025"
-                                {...form.getInputProps("semester")}
-                                />
-                                
-                                <ApprenticeEmailSearch
-                                    form={form}
-                                />
-    
-                                <Button color="red.1" type="submit" loading={loading} fullWidth>
-                                Create Mission
-                                </Button>
-                            </Stack>
-                            </form>
-                        </Box>
-                    </Modal>
+                    <MissionForm 
+                        showForm={showForm} 
+                        setShowForm={setShowForm} 
+                        loading={loading} 
+                        form={form} 
+                        handleSubmit={handleSubmit}
+                    />
                     {/* Mission Info */}
                     {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions}/>}
                 </AppShell.Main>

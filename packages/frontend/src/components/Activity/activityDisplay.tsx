@@ -1,6 +1,6 @@
 import { Group, Text, Divider, Badge, Popover, Accordion, Button} from "@mantine/core"
-import { ActivityDetailed } from "@shared/frontend";
-import { IconPencil, IconPlus } from "@tabler/icons-react"
+import { ActivityDetailed, Phase, Skill } from "@shared/frontend";
+import { IconCheck, IconPencil, IconPlus } from "@tabler/icons-react"
 import { ActivityFeedback } from "./activityFeedback";
 import classes from "@/styles/accordian.module.css";
 
@@ -28,13 +28,26 @@ interface ActivityDisplayProps {
     activity: ActivityDetailed;
     canEditActivity: boolean;
     startEditActivity: (activity: ActivityDetailed) => void;
-    triggerSkill: (activity: ActivityDetailed) => void;
+    triggerSkill: (activity: ActivityDetailed,phase: Phase) => void;
     canLeaveFeedback: boolean;
     triggerFeedback: (activity: ActivityDetailed) => void;
+    triggerValidation: (activity: ActivityDetailed, skill: Skill) => void;
+    canValidateSkill: boolean;
+    phase: Phase;
 }
 
 export const ActivityDisplay = (
-    {activity, canEditActivity, startEditActivity,triggerSkill, canLeaveFeedback, triggerFeedback}: ActivityDisplayProps
+    {
+        activity, 
+        canEditActivity,
+        startEditActivity,
+        triggerSkill, 
+        canLeaveFeedback, 
+        triggerFeedback,
+        canValidateSkill,
+        triggerValidation,
+        phase,
+    }: ActivityDisplayProps
 )=>{
     return(
         <div
@@ -61,6 +74,18 @@ export const ActivityDisplay = (
                                     <Group key={index} m="sm" gap="xs" style={{ cursor: 'pointer' }} >
                                         <Text c="gruvbox.9" fw={700} >{skill.type}</Text>
                                         <Badge color="green">{skill.level}</Badge>
+                                        {skill.validation && 
+                                        <>
+                                            <Badge color="orange"> Validated</Badge>
+                                            <Text>{skill.validation.validatedLevel}</Text>
+                                            <Text>{ new Date(skill.validation.validatedAt).toLocaleDateString()}</Text>
+                                        </>
+                                        }
+                                        {canValidateSkill && 
+                                        <Button size="compact-xs" color="blue" onClick={() => triggerValidation(activity,skill)}>
+                                            <IconCheck/> Validate
+                                        </Button>
+                                        }
                                     </Group>
                                 </Popover.Target>
                                 <Popover.Dropdown style={{ pointerEvents: 'none' }}>
@@ -75,7 +100,7 @@ export const ActivityDisplay = (
                         {canEditActivity && <Button color="blue" onClick={() => startEditActivity(activity)}>
                             <IconPencil/> Edit Activity
                             </Button>}
-                        {canEditActivity && <Button color="red" onClick={() => triggerSkill(activity)}>
+                        {canEditActivity && <Button color="red" onClick={() => triggerSkill(activity,phase)}>
                             <IconPlus/> Add Skill
                             </Button>}
                     </Group>
