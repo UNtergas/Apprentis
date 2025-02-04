@@ -27,7 +27,7 @@ export default function TutorPage(){
         },
     })
     const fetchMissions = async () => {
-        const missions_ = await ApiClient.Activity.getMissions();
+        const missions_ = (await ApiClient.Apprentice.getApprenticesByTutor()).flatMap(apprentice => apprentice.mission_apprenticeDetailed);
         setMissions([...missions_]);
         if (currentMission) {
             const updatedMission = missions_.find(m => m.id === currentMission.id);
@@ -90,7 +90,13 @@ export default function TutorPage(){
                             handleSubmit={handleApprenticeFormSubmit}
                         />
                         {/* Mission Info */}
-                        {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions}/>}
+                        {showInfo && 
+                        <MissionBlock 
+                            mission={currentMission} 
+                            onClose={()=> setShowInfo(false)} 
+                            reloadMissions={fetchMissions}
+                            currentUser={currentUser}
+                        />}
                     </AppShell.Main>
                 </AppShell>
                 ):(

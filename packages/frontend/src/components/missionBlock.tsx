@@ -1,6 +1,6 @@
 import { Card, Group, Title, Badge, Divider, Blockquote, Text, ActionIcon, Box, Button, Modal, Stack, Textarea, TextInput } from "@mantine/core";
 import { IconTarget, IconX } from "@tabler/icons-react";
-import { MissionCreateRequest, MissionDetailed } from "@shared/frontend";
+import { MissionCreateRequest, MissionDetailed, User } from "@shared/frontend";
 import { ApprenticeEmailSearch } from "./apprenticeMailSearch";
 import { UseFormReturnType } from "@mantine/form";
 import ActivitySection from "./Activity/main";
@@ -9,9 +9,10 @@ interface MissionBlockProps {
   mission: MissionDetailed | null;
   onClose: () => void; // Callback when closing the card
   reloadMissions: () => Promise<void>; // Callback to reload missions
+  currentUser: User;
 }
 
-export function MissionBlock({ mission, onClose, reloadMissions }: MissionBlockProps) {
+export function MissionBlock({ mission, onClose, reloadMissions,currentUser }: MissionBlockProps) {
   if (!mission) {
     return (
       <Card shadow="sm" p="lg" radius="md" withBorder>
@@ -42,7 +43,7 @@ export function MissionBlock({ mission, onClose, reloadMissions }: MissionBlockP
       </Blockquote>
 
       {/* Activities Section */}
-      <ActivitySection mission={mission} reloadMissions={reloadMissions}/>
+      <ActivitySection mission={mission} reloadMissions={reloadMissions} currentUser={currentUser}/>
     </Card>
   );
 }

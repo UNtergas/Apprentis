@@ -2,7 +2,7 @@
 
 import { SignInResponse, User } from "@shared/frontend";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter, usePathname} from "next/navigation";
+import { usePathname} from "next/navigation";
 import ApiClient from "./api/ApiClient";
 
 interface AuthContextType {
@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export const AuthProvider = ({children} : {children: React.ReactNode}) => {
     const [authInit, setAuthInit] = useState<boolean>(false);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const router = useRouter();
+    // const router = useRouter();
     const pathname = usePathname()
 
     const signIn = async (email: string, password: string):Promise<SignInResponse> => {
@@ -42,7 +42,7 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
     const signOut = async ()=>{
         await ApiClient.Auth.signOut();
         setCurrentUser(null);
-        router.push("/signIn");
+        // router.push("/");
 
     }
 

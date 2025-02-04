@@ -1,5 +1,5 @@
 import ApiClient from "@/api/ApiClient";
-import { Button, Box, Modal, Stack, Textarea, Group, Text, Timeline, ThemeIcon, Accordion } from "@mantine/core"
+import { Button, Box, Modal, Stack, Textarea, Group, Text, Timeline, ThemeIcon, Accordion, ScrollArea } from "@mantine/core"
 import { UseFormReturnType } from "@mantine/form";
 import { ActivityDetailed, FeedbackDetailed, Role, ROLE } from "@shared/frontend"
 import { IconBubbleText, IconBuildings, IconSchool } from "@tabler/icons-react";
@@ -37,14 +37,14 @@ export const ActivityFeedback = (
     return(
         <Accordion chevronPosition="left" variant="contained" chevron={<IconBubbleText/>}>
             <Accordion.Control >
-                <Text fw={700}> Feedbacks</Text>
+                <Text size="lg" fw={700}> Activity Feedbacks</Text>
             </Accordion.Control>
             <Accordion.Panel>
            {/* Feedback Section */}
            {feedbacks && feedbacks.length > 0 ? (
-                <>
+                <ScrollArea h={280}>
                 {/* <Text size="lg" fw={700} mb="md">Feedbacks</Text> */}
-                <Timeline>
+                <Timeline mt="md" ml="md">
                     {feedbacks.map((feedback: FeedbackDetailed) => {
                         const icon = getSenderInfo(feedback.senderRole)?.icon;
                         const color = getSenderInfo(feedback.senderRole)?.color;
@@ -65,7 +65,7 @@ export const ActivityFeedback = (
                         </Timeline.Item>
                     )})}
                 </Timeline>
-                </>
+                </ScrollArea>
                 ) : (
                     <p>No feedback available.</p>
                 )}

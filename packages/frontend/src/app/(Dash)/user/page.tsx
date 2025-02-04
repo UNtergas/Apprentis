@@ -76,55 +76,66 @@ export default function UserPage(){
     }, []);
 
     return(
-        <AppShell
-            header={{height: 60}}
-            navbar={{width: 320, breakpoint: 'sm'}}
-            padding="md"
-        >
-            <AppShell.Header>
-                <Header />
-            </AppShell.Header>
-            <AppShell.Navbar>
-                <DashBoard missions={missions} formCallBack={() => setShowForm(true)} missionCallBack={missionCallBack} role={currentUser?.role} />
-            </AppShell.Navbar>
-            <AppShell.Main>
-                {/* Form Modal */}
-                <Modal opened={showForm} onClose={() => setShowForm(false)} title="Create New Activity" centered>
-                    <Box p="md">
-                        <form onSubmit={form.onSubmit(handleSubmit)}>
-                        <Stack gap="sm">
+        <>{currentUser ? (
+            <AppShell
+                header={{height: 60}}
+                navbar={{width: 320, breakpoint: 'sm'}}
+                padding="md"
+                >
+                <AppShell.Header>
+                    <Header />
+                </AppShell.Header>
+                <AppShell.Navbar>
+                    <DashBoard missions={missions} formCallBack={() => setShowForm(true)} missionCallBack={missionCallBack} role={currentUser?.role} />
+                </AppShell.Navbar>
+                <AppShell.Main>
+                    {/* Form Modal */}
+                    <Modal opened={showForm} onClose={() => setShowForm(false)} title="Create New Activity" centered>
+                        <Box p="md">
+                            <form onSubmit={form.onSubmit(handleSubmit)}>
+                            <Stack gap="sm">
 
-                            <TextInput
-                            label="Title"
-                            placeholder="Enter activity title"
-                            {...form.getInputProps("title")}
-                            />
+                                <TextInput
+                                label="Title"
+                                placeholder="Enter activity title"
+                                {...form.getInputProps("title")}
+                                />
 
-                            <Textarea
-                            label="Description"
-                            placeholder="Enter activity description"
-                            {...form.getInputProps("description")}
-                            />
-                            <Select
-                                label="Mission Phase"
-                                placeholder="Select mission phase"
-                                data={[PHASE.STUDY,PHASE.ACTION,PHASE.IMPROVEMENT]}
-                                defaultValue={PHASE.STUDY}
-                                {...form.getInputProps("phase")}
-                            />
-                           
+                                <Textarea
+                                label="Description"
+                                placeholder="Enter activity description"
+                                {...form.getInputProps("description")}
+                                />
+                                <Select
+                                    label="Mission Phase"
+                                    placeholder="Select mission phase"
+                                    data={[PHASE.STUDY,PHASE.ACTION,PHASE.IMPROVEMENT]}
+                                    defaultValue={PHASE.STUDY}
+                                    {...form.getInputProps("phase")}
+                                    />
+                            
 
-                            <Button color="red.1" type="submit" loading={loading} fullWidth>
-                                Create Activity
-                            </Button>
-                        </Stack>
-                        </form>
-                    </Box>
-                </Modal>
-                {/* Mission Info */}
-                {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions} />}
-            </AppShell.Main>
-                
-        </AppShell>
+                                <Button color="red.1" type="submit" loading={loading} fullWidth>
+                                    Create Activity
+                                </Button>
+                            </Stack>
+                            </form>
+                        </Box>
+                    </Modal>
+                    {/* Mission Info */}
+                    {showInfo && 
+                        <MissionBlock 
+                            mission={currentMission} 
+                            onClose={()=> setShowInfo(false)} 
+                            reloadMissions={fetchMissions} 
+                            currentUser={currentUser}
+                        />
+                    }
+                </AppShell.Main>
+            </AppShell>
+            ):(
+                <div>Unauthorized</div>
+            )}
+        </>
     )
 }

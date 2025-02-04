@@ -1,8 +1,9 @@
-import { Group, Text, Divider, Badge, Popover, Accordion, Button} from "@mantine/core"
+import { Group, Text, Accordion, Button, ScrollArea, Card} from "@mantine/core"
 import { ActivityDetailed, Phase, Skill } from "@shared/frontend";
-import { IconCheck, IconPencil, IconPlus } from "@tabler/icons-react"
+import {  IconPencil, IconPlus } from "@tabler/icons-react"
 import { ActivityFeedback } from "./activityFeedback";
 import classes from "@/styles/accordian.module.css";
+import { SkillCard } from "./skillCard";
 
 
 
@@ -63,39 +64,37 @@ export const ActivityDisplay = (
                         <AccordionLabel title={activity.title} date={activity.date} />
                 </Accordion.Control>
                 <Accordion.Panel>
-                    {/* <Text size="lg" fw={700}>{activity.title}</Text> */}
+                    <Group justify="center" grow={true} align="start">
+
+                    <div>
+
+                    
                     <Text mt="xs">{activity.description}</Text>
-                    <Text mt="xs" fw={600}> Skills</Text>
-                    {
-                        activity.skillsDetailed.map((skill,index) => {
-                            return(
-                                <Popover key={index} position="left" withArrow shadow="md">
-                                <Popover.Target>
-                                    <Group key={index} m="sm" gap="xs" style={{ cursor: 'pointer' }} >
-                                        <Text c="gruvbox.9" fw={700} >{skill.type}</Text>
-                                        <Badge color="green">{skill.level}</Badge>
-                                        {skill.validation && 
-                                        <>
-                                            <Badge color="orange"> Validated</Badge>
-                                            <Text>{skill.validation.validatedLevel}</Text>
-                                            <Text>{ new Date(skill.validation.validatedAt).toLocaleDateString()}</Text>
-                                        </>
-                                        }
-                                        {canValidateSkill && 
-                                        <Button size="compact-xs" color="blue" onClick={() => triggerValidation(activity,skill)}>
-                                            <IconCheck/> Validate
-                                        </Button>
-                                        }
-                                    </Group>
-                                </Popover.Target>
-                                <Popover.Dropdown style={{ pointerEvents: 'none' }}>
-                                    <Text size="sm">{skill.description}</Text>
-                                </Popover.Dropdown>
-                            </Popover>
+                    <Text mt="xs" size="lg" fw={600} mb="lg">Technical Skills</Text>
+                    <ScrollArea h={330}>
+                        {
+                            activity.skillsDetailed.length > 0 ? (
+                            activity.skillsDetailed.map((skill,index) => {
+                                return(
+                                    <SkillCard
+                                        key={index}
+                                        skill={skill}
+                                        activity={activity}
+                                        canValidateSkill={canValidateSkill}
+                                        triggerValidation={triggerValidation}
+                                        index={index}
+                                    />
+                                )
+                            })
+                            ) : (
+                                <Card shadow="sm" p="lg" radius="md" withBorder style={{width: "80%"}}>
+                                    <Text size="md" ta="center" c="dimmed">
+                                    No skills available for this activity.
+                                    </Text>
+                                </Card>
                             )
-                        })
-                    }
-                    <Divider mt="sm" mb="sm" />
+                        }
+                    </ScrollArea>
                     <Group>
                         {canEditActivity && <Button color="blue" onClick={() => startEditActivity(activity)}>
                             <IconPencil/> Edit Activity
@@ -104,11 +103,13 @@ export const ActivityDisplay = (
                             <IconPlus/> Add Skill
                             </Button>}
                     </Group>
-                <ActivityFeedback
-                    activity={activity}
-                    canLeaveFeedback={canLeaveFeedback}
-                    triggerFeedback={triggerFeedback}
-                    />
+                    </div>
+                    <ActivityFeedback
+                        activity={activity}
+                        canLeaveFeedback={canLeaveFeedback}
+                        triggerFeedback={triggerFeedback}
+                        />
+                    </Group>
                 </Accordion.Panel>
             </Accordion.Item>
         </Accordion>

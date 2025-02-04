@@ -1,10 +1,9 @@
 'use client';
 
 import ApiClient from "@/api/ApiClient";
-import { useAuth } from "@/auth.context";
 import { Accordion, Stack, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { APIException, Phase, PHASE, ROLE, Activity, LEVEL, skillPhaseMapping, SkillCreate, Level, MissionDetailed, ActivityDetailed, Skill } from "@shared/frontend";
+import { APIException, Phase, PHASE, ROLE, Activity, LEVEL, skillPhaseMapping, SkillCreate, Level, MissionDetailed, ActivityDetailed, Skill, User } from "@shared/frontend";
 import { IconBook, IconDirectionSign, IconProgressCheck } from "@tabler/icons-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -20,13 +19,14 @@ const PHASES = [
     
 interface ActivityProps {
     mission: MissionDetailed;
+    currentUser : User;
     reloadMissions: () => Promise<void>;
 }    
 const ActivitySection = (
-    {mission,reloadMissions}:ActivityProps
+    {mission,reloadMissions,currentUser}:ActivityProps
 ) => {
     // Auth context
-    const { currentUser } = useAuth();
+    // const { currentUser } = useAuth();
     //form state
     const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -199,9 +199,9 @@ const ActivitySection = (
     }
 
     return(    
-        <>{currentUser ? (    
+        // <>{currentUser ? (    
         <div>
-            <Title order={5} mt="md">Activities</Title>
+            <Title order={3} mt="md">Activities</Title>
             <Accordion variant="contained" mt="sm">
                 {PHASES.map(
                     ({phase,icon},phaseIndex) => {
@@ -211,34 +211,36 @@ const ActivitySection = (
                                 <Accordion.Control>{icon}{phase}</Accordion.Control>
                                 <Accordion.Panel>
                                     {phaseActivities.length > 0 ? (
-                                    <Stack align="stretch" justify="center">
-                                        {phaseActivities.map((activity:ActivityDetailed,index) => (
-                                            <div key={index}
-                                            >
-                                                {
-                                                isEditActivity && editActivity?.id === activity.id ? (
-                                                    <ActivityEdit
-                                                        editActivity={editActivity}
-                                                        setEditActivity={setEditActivity}
-                                                        updateActivity={updateActivity}
-                                                        cancelEditActivity={cancelEditActivity}
+                                    <>
+                                        <Stack align="stretch" justify="center">
+                                            {phaseActivities.map((activity:ActivityDetailed,index) => (
+                                                <div key={index}
+                                                >
+                                                    {
+                                                    isEditActivity && editActivity?.id === activity.id ? (
+                                                        <ActivityEdit
+                                                            editActivity={editActivity}
+                                                            setEditActivity={setEditActivity}
+                                                            updateActivity={updateActivity}
+                                                            cancelEditActivity={cancelEditActivity}
+                                                            />
+                                                        ):(
+                                                        <ActivityDisplay
+                                                        activity={activity}
+                                                        canEditActivity={canEditActivity}
+                                                        startEditActivity={startEditActivity}
+                                                        triggerSkill={triggerSkill}
+                                                        phase={phase}
+                                                        canLeaveFeedback={canLeaveFeedback}
+                                                        triggerFeedback={triggerFeedback}
+                                                        canValidateSkill={canValidateSkill}
+                                                        triggerValidation={triggerValidation}
                                                         />
-                                                    ):(
-                                                    <ActivityDisplay
-                                                    activity={activity}
-                                                    canEditActivity={canEditActivity}
-                                                    startEditActivity={startEditActivity}
-                                                    triggerSkill={triggerSkill}
-                                                    phase={phase}
-                                                    canLeaveFeedback={canLeaveFeedback}
-                                                    triggerFeedback={triggerFeedback}
-                                                    canValidateSkill={canValidateSkill}
-                                                    triggerValidation={triggerValidation}
-                                                    />
-                                                )}
-                                            </div>
-                                        ))}
-                                    </Stack>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </Stack>
+                                    </>
                                     ):(
                                         <p>No activities for this phase.</p>
                                     )}
@@ -274,10 +276,11 @@ const ActivitySection = (
                 handleSubmit={handleSkillValidationSubmit}
                 form={skillValidationForm}
             />
-        </div>):(
-                <div>Unauthorized</div>
-            )}
-        </>
+        </div>
+        // ):(
+        //         <div>Unauthorized</div>
+        //     )}
+        // </>
     )
 };
 export default ActivitySection;

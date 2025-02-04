@@ -96,7 +96,7 @@ export default function CompanyPage(){
                         handleSubmit={handleSubmit}
                     />
                     {/* Mission Info */}
-                    {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions}/>}
+                    {showInfo && <MissionBlock mission={currentMission} onClose={()=> setShowInfo(false)} reloadMissions={fetchMissions} currentUser={currentUser}/>}
                 </AppShell.Main>
             </AppShell>
             ):(
