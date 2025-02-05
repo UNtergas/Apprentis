@@ -6,6 +6,7 @@ import { theme } from "@/themes";
 import { AuthProvider } from "@/auth.context";
 import "@/styles/main.css";
 import '@mantine/core/styles.css';
+import '@mantine/charts/styles.css';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

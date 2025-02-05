@@ -2,7 +2,7 @@ import { ApiProperty , ApiBody } from '@nestjs/swagger';
 import { Mission, MissionDetailed } from './mission.dto';
 import { Activity, ActivityDetailed } from './activity.dto';
 import { Feedback } from './feedback.dto';
-import { SkillValidation } from './skillValidation.dto';
+import { SkillValidation, SkillValidationDetailed } from './skillValidation.dto';
 
 export const ROLE ={
   STUDENT: 'STUDENT',
@@ -38,6 +38,12 @@ export class Apprentice extends User {
   activities: Activity[];
   validatedCompetencies: SkillValidation[];
 }
+export type ApprenticeSkillMap = User & {
+  tutorId: number;
+  activities: Activity[];
+  validatedCompetencies: SkillValidationDetailed[];
+}
+
 export type ApprenticeUpdate = Partial<Omit<Apprentice, 'id' | 'mission_apprentice' | 'activities' | 'validatedCompetencies'| 'role'>>;
 
 export type ApprenticeDetailed = Apprentice & {

@@ -13,6 +13,7 @@ export enum SecurityScope {
   FEEDBACK_READ = "feedback.read",
   FEEDBACK_WRITE = "feedback.write",
   APPRENTICE_READ = "apprentice.read",
+  APPRENTICE_CURRENT_READ = "apprentice:current.read",
   APPRENTICE_WRITE = "apprentice.write",
   VALIDATION_WRITE = "validation.write",
   VALIDATION_READ = "validation.read",
@@ -31,6 +32,7 @@ export const APPRENTICE_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([
   SecurityScope.ACTIVITY_WRITE,
   SecurityScope.FEEDBACK_READ,
   SecurityScope.VALIDATION_READ,
+  SecurityScope.APPRENTICE_CURRENT_READ,
 ]);
 
 export const COMPANY_SCOPES: Set<SecurityScope> = new Set<SecurityScope>([

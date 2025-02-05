@@ -37,7 +37,7 @@ export const ActivityFeedback = (
     return(
         <Accordion chevronPosition="left" variant="contained" chevron={<IconBubbleText/>}>
             <Accordion.Control >
-                <Text size="lg" fw={700}> Activity Feedbacks</Text>
+                <Text size="lg" fw={700}> Activity Feedbacks ({activity.feedbacks.length})</Text>
             </Accordion.Control>
             <Accordion.Panel>
            {/* Feedback Section */}

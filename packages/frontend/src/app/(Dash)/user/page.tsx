@@ -5,21 +5,66 @@ import { useAuth } from "@/auth.context";
 import { MissionBlock } from "@/components/missionBlock";
 import { DashBoard } from "@/container/dashboard";
 import { Header } from "@/container/header";
-import { AppShell, Box, Button, Modal, Select, Stack, Textarea, TextInput } from "@mantine/core";
+import { AppShell, Box, Button, Card, Modal, Select, Stack, Textarea, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ActivityCreateRequest, APIException, MissionDetailed, PHASE } from "@shared/frontend";
+import { RadarChart } from '@mantine/charts';
+import { ActivityCreateRequest, APIException, LEVEL, MissionDetailed, PHASE, SKILLTYPE, SkillValidationMap } from "@shared/frontend";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { mapSkillWithValidationLevel } from "@shared/frontend";
 
+// const LEVEL_VALUES: Record<keyof typeof LEVEL, number> = {
+//     BASIC: 1,
+//     INTERMEDIATE: 2,
+//     ADVANCED: 3,
+//     EXPERT: 4,
+// };
+
+// const mapSkillsForRadar = (validatedSkills: SkillValidationMap[]) => {
+//     // Initialize all skill types with a default level of 0
+//     const skillMap: Record<string, number> = Object.keys(SKILLTYPE).reduce((acc, key) => {
+//         acc[key] = 0;
+//         return acc;
+//     }, {} as Record<string, number>);
+
+//     // Update the map with actual validated levels
+//     validatedSkills.forEach(({ skillType, validatedLevel }) => {
+//         if (skillType in skillMap) {
+//         skillMap[skillType] = LEVEL_VALUES[validatedLevel as keyof typeof LEVEL] || 0;
+//         }
+//     });
+//     // Convert to an array for Mantine Radar Chart
+//     return Object.entries(skillMap).map(([skill, value]) => ({
+//         skill,
+//         value,
+//     }));
+// };
+  
 export default function UserPage(){
     const { currentUser } = useAuth();
 
     const [showForm, setShowForm] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
+    const [showGraph, setShowGraph] = useState(true);
     const [currentMission, setCurrentMission] = useState<MissionDetailed | null>(null);
     const [missions, setMissions] = useState<MissionDetailed[]>([]);
     const [loading, setLoading] = useState(false);
+    // const [validatedSkills, setValidatedSkills] = useState<SkillValidationMap[]>([]);
+    const [radarData, setRadarData] = useState<{ skill: string; value: number }[]>([]);
 
+    const mapSkillToValidation = async() => {
+        const validatedSkills_ = (await ApiClient.Apprentice.getApprenticeInfo()).validatedCompetencies;
+        const mapped = validatedSkills_.map(
+            (skill) => ({
+                skillType: skill.skill.type,
+                validatedLevel: skill.validatedLevel,
+            })
+        )
+        if (mapped.length > 0) {
+            setRadarData(mapSkillWithValidationLevel(mapped));
+        }
+    }
+   
     // Activity Form
     const form = useForm({
         initialValues: {
@@ -62,8 +107,18 @@ export default function UserPage(){
         setShowInfo(true);
     }
 
+    const showGraphCallBack = () => {
+        setShowGraph(true);
+        setShowInfo(false);
+    }
+    const showInfoCallBack = () => {
+        setShowGraph(false);
+        setShowInfo(true);
+    }
+
     const fetchMissions = async () => {
         const missions_ = await ApiClient.Activity.getMissions();
+        await mapSkillToValidation();
         setMissions([...missions_]);
         if (currentMission) {
             const updatedMission = missions_.find(m => m.id === currentMission.id);
@@ -86,11 +141,17 @@ export default function UserPage(){
                     <Header />
                 </AppShell.Header>
                 <AppShell.Navbar>
-                    <DashBoard missions={missions} formCallBack={() => setShowForm(true)} missionCallBack={missionCallBack} role={currentUser?.role} />
+                    <DashBoard 
+                        missions={missions} 
+                        formCallBack={showInfoCallBack} 
+                        missionCallBack={missionCallBack} 
+                        role={currentUser?.role}
+                        chartCallBack={showGraphCallBack} 
+                    />
                 </AppShell.Navbar>
                 <AppShell.Main>
                     {/* Form Modal */}
-                    <Modal opened={showForm} onClose={() => setShowForm(false)} title="Create New Activity" centered>
+                    <Modal opened={showForm} onClose={() => {setShowForm(false)}} title="Create New Activity" centered>
                         <Box p="md">
                             <form onSubmit={form.onSubmit(handleSubmit)}>
                             <Stack gap="sm">
@@ -123,14 +184,26 @@ export default function UserPage(){
                         </Box>
                     </Modal>
                     {/* Mission Info */}
-                    {showInfo && 
+                    {showInfo ? (
                         <MissionBlock 
                             mission={currentMission} 
-                            onClose={()=> setShowInfo(false)} 
+                            onClose={() => setShowInfo(false)} 
                             reloadMissions={fetchMissions} 
                             currentUser={currentUser}
                         />
-                    }
+                    ) : showGraph ? (
+                        <Card shadow="sm" p="lg" radius="md" withBorder>
+                            <Stack>
+                                <Title order={2}>Technical Skill Evaluation </Title>
+                                <RadarChart
+                                    h={300}
+                                    data={radarData}
+                                    dataKey="skill"
+                                    series={[{ name: "value", color: 'blue', strokeColor: 'blue' }]}
+                                    />
+                            </Stack>
+                        </Card>
+                    ) : null}
                 </AppShell.Main>
             </AppShell>
             ):(

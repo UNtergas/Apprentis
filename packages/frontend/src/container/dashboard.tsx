@@ -1,5 +1,5 @@
 import { Group, Code, ScrollArea } from "@mantine/core";
-import { IconBackpack, IconBook, IconBuildings, IconDirectionSign, IconLicense, IconPencil, IconProgressCheck, IconSchool } from "@tabler/icons-react";
+import { IconBackpack, IconBook, IconBuildings, IconChartHistogram, IconDirectionSign, IconLicense, IconPencil, IconProgressCheck, IconSchool } from "@tabler/icons-react";
 import classes from "@/styles/dashboard.module.css";
 import { MissionDetailed, PHASE, ROLE, Role } from "@shared/frontend";
 import { LinkItem, LinksGroup } from "@/components/linkgroup";
@@ -13,10 +13,11 @@ interface DashBoardProps {
   missions?: MissionDetailed[];
   formCallBack?: () => void;
   missionCallBack?: (mission: MissionDetailed) => void;
+  chartCallBack?: () => void;
   role?: Role;
 }
 
-export function DashBoard({ missions = [], formCallBack, missionCallBack, role }: DashBoardProps) {
+export function DashBoard({ missions = [], formCallBack, missionCallBack,chartCallBack ,role }: DashBoardProps) {
   const missionLinks:LinkItem[] = missions.map((mission) => ({
     link: mission.title,
     label: mission.title,
@@ -62,13 +63,6 @@ export function DashBoard({ missions = [], formCallBack, missionCallBack, role }
       ]
     }));
     
-    if (role === ROLE.COMPANY) {
-        missionLinks.push({
-          link: "add-mission",
-            label: "+ Add new mission",
-            callback: formCallBack,
-        });
-    }
 
     return (
       <nav className={classes.navbar}>
@@ -81,6 +75,7 @@ export function DashBoard({ missions = [], formCallBack, missionCallBack, role }
   
         <ScrollArea className={classes.links}>
            <LinksGroup icon={IconLicense} label="My missions" links={missionLinks} initiallyOpened />
+           <LinksGroup icon={IconChartHistogram} label="Skill Point" initiallyOpened callback={chartCallBack} />
         </ScrollArea>
       </nav>
     );

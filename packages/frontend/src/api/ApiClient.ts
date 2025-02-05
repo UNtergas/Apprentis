@@ -5,6 +5,7 @@ import {
   APIException, 
   Apprentice, 
   ApprenticeDetailed, 
+  ApprenticeSkillMap, 
   Feedback, 
   FeedbackCreateRequest, 
   FeedbackDetailed, 
@@ -142,8 +143,8 @@ class ApiClient{
     }
   }
   static Apprentice = {
-    getApprenticeInfo: async (): Promise<Apprentice> => {
-      const res = await ApiClient.sendRequest<"apprentice", Apprentice>('GET', '/api/apprentice/', undefined);
+    getApprenticeInfo: async (): Promise<ApprenticeSkillMap> => {
+      const res = await ApiClient.sendRequest<"apprentice", ApprenticeSkillMap>('GET', '/api/apprentice/', undefined);
       return res.apprentice;
     },
     getApprenticeByMission: async (): Promise<ApprenticeDetailed[]> => {

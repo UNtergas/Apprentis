@@ -1,4 +1,4 @@
-import { Level } from "./skill.dto";
+import { Level, Skill, SkillType } from "./skill.dto";
 
 export class SkillValidation {
     id : number;
@@ -10,4 +10,9 @@ export class SkillValidation {
     skillId : number;
 }
 
+export type SkillValidationDetailed = SkillValidation & {
+    skill: {
+        type: SkillType;
+    };
+};
 export type SkillValidationCreate = Pick <SkillValidation, 'validatedLevel' | 'skillId' | 'apprenticeId'>;

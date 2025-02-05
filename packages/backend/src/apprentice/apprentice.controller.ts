@@ -20,6 +20,7 @@ import {
   Mission,
   Activity,
   ApprenticeDetailed,
+  ApprenticeSkillMap,
 } from "@shared/backend";
 import { MissionService } from "#/mission/mission.service";
 import { SkillService } from "#/skill/skill.service";
@@ -34,10 +35,10 @@ export class ApprenticeController {
 
   @HttpCode(HttpStatus.OK)
   @Get("")
-  @Permissions(SecurityScope.MISSION_READ)
+  @Permissions(SecurityScope.APPRENTICE_CURRENT_READ)
   async getApprenticeInfo(
     @CurrentUserID() userId: number,
-  ): Promise<ResponseObject<"apprentice", Apprentice>> {
+  ): Promise<ResponseObject<"apprentice", ApprenticeSkillMap>> {
     const apprentice = await this.apprenticeService.findOneById(userId);
     return { apprentice };
   }

@@ -34,4 +34,8 @@ export class Skill {
     validation?: SkillValidation;
 }
 
+export type SkillValidationMap = {
+    skillType: SkillType;
+    validatedLevel: Level;
+}
 export type SkillCreate = Pick<Skill, 'level'|'type'|'description'>;

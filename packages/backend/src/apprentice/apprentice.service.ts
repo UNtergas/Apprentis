@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Apprentice, ApprenticeUpdate, ROLE } from "@shared/backend";
+import { Apprentice, ApprenticeSkillMap, ApprenticeUpdate, ROLE } from "@shared/backend";
 import PRISMA from "../../prisma";
 @Injectable()
 export class ApprenticeService {
@@ -28,7 +28,7 @@ export class ApprenticeService {
     });
   }
 
-  async findOneById(id: number): Promise<Apprentice> {
+  async findOneById(id: number): Promise<ApprenticeSkillMap> {
     return PRISMA.user.findUnique({
       where: {
         id: id,
@@ -51,7 +51,15 @@ export class ApprenticeService {
             feedbacks: true,
           },
         },
-        validatedCompetencies: true,
+        validatedCompetencies: {
+          include:{
+            skill: {
+              select:{
+                type: true,
+              }
+            },
+          }
+        },
       },
     });
   }

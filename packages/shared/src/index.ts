@@ -3,6 +3,7 @@
 export * from "./utils/Exception";
 export * from "./utils/SkillPhaseUtil";
 export * from "./utils/emailValidator";
+export * from "./utils/mapSkillWithValidationLevel";
 // DTOS 
 export * from "./model/activity.dto";
 export * from "./model/auth.dto";

@@ -70,7 +70,7 @@ export const ActivityDisplay = (
 
                     
                     <Text mt="xs">{activity.description}</Text>
-                    <Text mt="xs" size="lg" fw={600} mb="lg">Technical Skills</Text>
+                    <Text mt="xs" size="lg" fw={600} mb="lg">Technical Skills ({activity.skills.length})</Text>
                     <ScrollArea h={330}>
                         {
                             activity.skillsDetailed.length > 0 ? (
