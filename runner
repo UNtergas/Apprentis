@@ -149,6 +149,17 @@ clean_app(){
     fi
 }
 
+clean_prod(){
+
+  sudo rm -rf node_modules packages/*/node_modules  packages/shared/*/node_modules
+  sudo rm -rf packages/*/dist packages/shared/*/dist
+  sudo rm -rf packages/*/buildCache
+  sudo rm -rf packages/front/.next
+  sudo rm -rf pnpm-lock.yaml .pnpm-store
+#      sudo docker volume remove postgres_data
+  echo "Project is deep cleaned !"
+}
+
 
 prune_docker_images() {
     local images=("$@")
@@ -261,7 +272,7 @@ elif [[ "$1" = "dev" ]]; then
 elif [[ "$1" = "prod" ]]; then
   check_requirements
   if [[ $? -eq 0 ]] then
-    # clean_app --force-proceeed
+    clean_prod --force-proceeed
     sym_env
     run_prod
   else
