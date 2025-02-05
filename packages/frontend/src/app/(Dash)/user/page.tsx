@@ -113,7 +113,7 @@ export default function UserPage(){
     }
     const showInfoCallBack = () => {
         setShowGraph(false);
-        setShowInfo(true);
+        setShowForm(true);
     }
 
     const fetchMissions = async () => {
