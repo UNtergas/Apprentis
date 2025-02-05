@@ -156,7 +156,6 @@ class ApiClient{
       return res.emails;
     },
     setTutorat: async (email: string): Promise<Apprentice> => {
-      console.log("query",email);
       const res = await ApiClient.sendRequest<"apprentice", Apprentice>('POST', '/api/apprentice/tutor', { apprenticeEmail: email });
       return res.apprentice;
     },

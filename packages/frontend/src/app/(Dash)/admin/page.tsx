@@ -46,6 +46,8 @@ export default function AdminPage(){
             setUsers(updatedUsers);
             setLoading(false);
             toast.success('Company added successfully');
+            setIsAdd(null);
+            form.reset();
         }catch(err){
             if(err instanceof APIException){
                 setError(err.message);
@@ -66,6 +68,8 @@ export default function AdminPage(){
             setUsers(updatedUsers);
             setLoading(false);
             toast.success('Tutor added successfully');
+            setIsAdd(null);
+            form.reset();
         }catch(err){
             if(err instanceof APIException){
                 setError(err.message);

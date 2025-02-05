@@ -59,12 +59,12 @@ export const AuthProvider = ({children} : {children: React.ReactNode}) => {
         const initAuthContext = async () => {
             try {
                 const isAuthenticated = await checkAuth();
-                console.log("Is authenticated", isAuthenticated);
+                // console.log("Is authenticated", isAuthenticated);
                 if (isAuthenticated) {
                     await fetchCurrentUser();
-                    console.log("User is logged in", currentUser);
+                    // console.log("User is logged in", currentUser as User);
                 }else{
-                    console.log("User is not logged in");
+                    // console.log("User is not logged in");
                 }
             } catch (e) {
                 console.error("Failed to fetch user during initialization:", e);

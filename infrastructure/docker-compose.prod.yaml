@@ -1,7 +1,4 @@
-
-
 services:
-
   mono-app:
     image: "${DOCKER_IMAGE}"
     container_name: option-monorepo
@@ -20,7 +17,7 @@ services:
                     && apt-get clean && rm -rf /var/lib/apt/lists/*
     volumes:
       - "${ROOT_PROJECT}:${ROOT_PROJECT}:Z"
-    command: sh -c "cd ${ROOT_PROJECT} && ${DOCKER_DEV_ENTRY_CMD}"
+    command: sh -c "cd ${ROOT_PROJECT} && ${DOCKER_PROD_ENTRY_CMD}"
     ports:
       - "3000:3000"
       - "8080:8080"
@@ -56,7 +53,7 @@ services:
       - "${TLS_DIR}:/etc/nginx/certs"
     depends_on:
       - mono-app
-    hostname: "${LOCAL_HOSTNAME_DEV}"
+    hostname: "${LOCAL_HOSTNAME_PROD}"
 volumes:
   postgres-data:
     name: project-option-postgres-data

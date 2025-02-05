@@ -2,6 +2,9 @@
 CREATE TYPE "Role" AS ENUM ('STUDENT', 'COMPANY', 'ADMIN', 'TUTOR');
 
 -- CreateEnum
+CREATE TYPE "Phase" AS ENUM ('STUDY', 'ACTION', 'IMPROVEMENT');
+
+-- CreateEnum
 CREATE TYPE "SkillType" AS ENUM ('ANALYTICAL', 'PLANNING', 'ADHESION', 'RESOURCE_MANAGEMENT', 'INFOMATION_PROCESSING', 'RISK_MANAGEMENT', 'OPERATION_IMPLEMENTATION', 'CONTROL', 'CORRECTION', 'MONITORING');
 
 -- CreateEnum
@@ -37,7 +40,9 @@ CREATE TABLE "Activity" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "phase" "Phase" NOT NULL,
     "apprenticeId" INTEGER NOT NULL,
+    "missionId" INTEGER NOT NULL,
 
     CONSTRAINT "Activity_pkey" PRIMARY KEY ("id")
 );
@@ -46,8 +51,8 @@ CREATE TABLE "Activity" (
 CREATE TABLE "Skill" (
     "id" SERIAL NOT NULL,
     "type" "SkillType" NOT NULL,
-    "description" TEXT NOT NULL,
     "level" "Level" NOT NULL,
+    "description" TEXT NOT NULL,
 
     CONSTRAINT "Skill_pkey" PRIMARY KEY ("id")
 );
@@ -108,6 +113,9 @@ ALTER TABLE "Mission" ADD CONSTRAINT "Mission_companyId_fkey" FOREIGN KEY ("comp
 
 -- AddForeignKey
 ALTER TABLE "Activity" ADD CONSTRAINT "Activity_apprenticeId_fkey" FOREIGN KEY ("apprenticeId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Activity" ADD CONSTRAINT "Activity_missionId_fkey" FOREIGN KEY ("missionId") REFERENCES "Mission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SkillOnActivity" ADD CONSTRAINT "SkillOnActivity_skillId_fkey" FOREIGN KEY ("skillId") REFERENCES "Skill"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

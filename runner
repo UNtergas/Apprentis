@@ -20,6 +20,7 @@ export ROOT_PROJECT
 
 # DOCKER COMPOSE FILE
 DOCKER_COMPOSE_DEV="${ROOT_PROJECT}/infrastructure/docker-compose.dev.yaml"
+DOCKER_COMPOSE_PROD="${ROOT_PROJECT}/infrastructure/docker-compose.prod.yaml"
 # DOCKER IMAGE
 DOCKER_IMAGE="option-monorepo-image:1.0"
 export DOCKER_IMAGE
@@ -39,8 +40,13 @@ CERT_FILE="certificate.crt"
 KEY_FILE="private.key"
 
 # Define the local hostname
-LOCAL_HOSTNAME="localdev.me"
-export LOCAL_HOSTNAME
+
+#dev
+LOCAL_HOSTNAME_DEV="localdev.me"
+#prod
+LOCAL_HOSTNAME_PROD="localhost"
+export LOCAL_HOSTNAME_DEV
+export LOCAL_HOSTNAME_PROD
 
 check_and_assign_local_host() {
     if ! grep -q "$LOCAL_HOSTNAME" /etc/hosts; then
@@ -121,6 +127,8 @@ display_help() {
   echo "  ./runner up          Start the existing container app in development mode"
   echo "  ./runner backend     Start only the frontend in development mode"
   echo "  ./runner frontend    Start only the backend in development mode"
+  echo "  ./runner prod        Build and run the app in production mode"s
+  echo "  ./runner down        Stop the running container"
   echo ""
   echo "Important Notes"
   echo "- Don't run  with 'sudo'"
@@ -172,6 +180,17 @@ clean_dev(){
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
 
+run_prod(){
+  auto_check_and_generate_tls
+  # check_and_assign_local_host
+  export DOCKER_PROD_ENTRY_CMD="pnpm i && pnpm run build && pnpm run prod:all"
+  mkdir -p node_modules
+  docker compose -f "${DOCKER_COMPOSE_DEV}" build --no-cache
+  docker compose -f "${DOCKER_COMPOSE_PROD}" up --remove-orphans -d
+  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app
+}
+
+
 check_requirements(){
   if [[ ! -f "${ROOT_PROJECT}/.env" ]]; then
     echo "Error: .env file not found in the root project directory."
@@ -195,6 +214,9 @@ up_dev(){
   docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app 
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
+
+
+
 down(){
   docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
@@ -230,6 +252,18 @@ elif [[ "$1" = "dev" ]]; then
   if [[ $? -eq 0 ]] then
     sym_env
     clean_dev
+  else
+    echo "Requirements check failed!"
+    exit 1
+  fi
+  exit 0
+
+elif [[ "$1" = "prod" ]]; then
+  check_requirements
+  if [[ $? -eq 0 ]] then
+    # clean_app --force-proceeed
+    sym_env
+    run_prod
   else
     echo "Requirements check failed!"
     exit 1

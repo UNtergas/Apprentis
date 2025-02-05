@@ -19,7 +19,9 @@ import ApiClient from '@/api/ApiClient';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import { useAuth } from '@/auth.context';
 export default function AuthentificationPage() {
+    const {signIn} = useAuth();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const form = useForm({
@@ -36,10 +38,11 @@ export default function AuthentificationPage() {
     const handleSubmit = async ( values: SignInDTO) => {
         try{
             setLoading(true);
-            await ApiClient.Auth.signIn(values.email, values.password);
+            // await ApiClient.Auth.signIn(values.email, values.password);
+            await signIn(values.email, values.password);
             setLoading(false);
-            // window.location.href = '/user';
-            router.push('/user');
+            window.location.href = '/user';
+            // router.push('/user');
         }catch(e){
             setLoading(false);
             if(e instanceof APIException){

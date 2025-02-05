@@ -25,7 +25,7 @@ export async function middleware(req: NextRequest) {
     // Verify the JWT
     const { payload } = await jwtVerify(cookie.value, JWT_SECRET);
     const userRole = payload["role"] as Role;
-
+    // console.log("User role:", userRole);
     // Allow access to the reset-password page if the user is authenticated
     if (pathname === "/reset-password") {
       return NextResponse.next();
