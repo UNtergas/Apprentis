@@ -46,7 +46,7 @@ export default function AuthentificationPage() {
 
             // Delay the redirection for the same duration
             setTimeout(() => {
-                router.push('/user');
+                window.location.href = '/user';
             }, REDIRECT_DELAY);
         }catch(e){
             setLoading(false);

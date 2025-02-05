@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Private Layout",
-    description: "Private Layout",
+    title: "Apprentis-Private",
+    description: "Formation en sécurité informatique par la voie de l’apprentissage ",
 }
 
 export default function PrivateLayout({ children }: Readonly<{ children: React.ReactNode }>) {

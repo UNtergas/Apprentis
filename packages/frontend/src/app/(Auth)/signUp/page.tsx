@@ -38,7 +38,11 @@ export default function AuthentificationPage() {
             setLoading(true);
             await ApiClient.Auth.signUp(values.name,values.email, values.password);
             setLoading(false);
-            router.push('/signIn')
+            toast.success('Account created successfully',{ autoClose: 2000 });
+            
+            setTimeout(() => {
+                router.push('/signIn');
+            }, 2000);
         }catch(e){
             setLoading(false);
             if(e instanceof APIException){
