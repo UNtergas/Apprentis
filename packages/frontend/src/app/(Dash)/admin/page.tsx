@@ -1,12 +1,12 @@
 'use client';
-import { Alert, AppShell, Button, Flex, Group, Modal, Table, TextInput } from "@mantine/core";
+import { Alert, AppShell, Button, Flex, Group, Modal, Table, TextInput, Title } from "@mantine/core";
 import { Header } from "@/container/header";
 import { useEffect, useState } from "react";
 import { APIException, emailValidator, User } from "@shared/frontend";
 import { useForm } from "@mantine/form";
 import ApiClient from "@/api/ApiClient";
 import { toast } from "react-toastify";
-
+import { UsersTable } from "@/components/adminTable";
 
 const DEFAULT_SELLER_PASSWORD = 'azerty'
 
@@ -85,34 +85,15 @@ export default function AdminPage(){
                 <Flex direction={'column'} pt={'xl'}>
                     {/* Buttons Section */}
                     <Flex direction={'row'} justify="space-between" align="flex-start" mb={'xs'}>
-                        <h1>Manage users</h1>
+                        <Title order={1} size="xl"> Manage Users</Title>
                         <Group>
                             <Button color="red" onClick={() => {setIsAdd("company")}}>Add Company</Button>
                             <Button color="red" onClick={() => {setIsAdd("tutor")}}>Add Tutor</Button>
                         </Group>
                     </Flex>
                     {/* User table section */}
-                    <Table highlightOnHover withTableBorder withColumnBorders>
-                        <Table.Thead>
-                            <Table.Tr>
-                                <Table.Th>Id</Table.Th>
-                                <Table.Th>Email</Table.Th>
-                                <Table.Th>Name</Table.Th>
-                                <Table.Th>Role</Table.Th>
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {users.map((user) => (
-                                <Table.Tr key={user.email}>
-                                    <Table.Td>{user.id}</Table.Td>
-                                    <Table.Td>{user.email}</Table.Td>
-                                    <Table.Td>{user.name}</Table.Td>
-                                    <Table.Td>{user.role}</Table.Td>
-                                </Table.Tr>
-                            ))}
-                        </Table.Tbody>
-                    </Table>
-                    {/* Add User Modal */}
+                    <UsersTable users={users}/>
+                    
                     {isAdd && (
                         <Modal
                             size={"md"}
