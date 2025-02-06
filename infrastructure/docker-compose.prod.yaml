@@ -42,5 +42,6 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+volumes:
   postgres-data:
     name: project-option-postgres-data
