@@ -29,7 +29,12 @@ jobs:
           SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
           SSH_PORT: ${{ secrets.VPS_SSH_PORT }}
           SSH_USER: ${{ secrets.VPS_SSH_USER }}
-
+      - name: Debug SSH Key
+        run: |
+            echo "Checking SSH Key..."
+            ls -lah ~/.ssh/
+            file ~/.ssh/ssh_vps_private.key
+            cat ~/.ssh/ssh_vps_private.key | head -n 5
       - name: SSH into server and sync the source code
         run: |
           ssh VPS_SERVER << EOF
