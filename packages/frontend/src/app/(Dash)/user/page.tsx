@@ -81,6 +81,7 @@ export default function UserPage(){
     const missionCallBack = (mission: MissionDetailed) => {
         setCurrentMission(mission);
         setShowInfo(true);
+        toggle();
     }
 
     const showGraphCallBack = () => {

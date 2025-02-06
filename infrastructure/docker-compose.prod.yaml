@@ -42,18 +42,5 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  nginx:
-    image: nginx:alpine
-    container_name: nginx-proxy
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - "${NGINX_DEV}:/etc/nginx/conf.d/nginx-dev.conf:Z"
-      - "${TLS_DIR}:/etc/nginx/certs"
-    depends_on:
-      - mono-app
-    hostname: "${LOCAL_HOSTNAME_PROD}"
-volumes:
   postgres-data:
     name: project-option-postgres-data

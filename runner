@@ -60,6 +60,8 @@ check_and_assign_local_host() {
 # Location of nginx files
 NGINX_DEV="${ROOT_PROJECT}/infrastructure/nginx.dev.conf"
 export NGINX_DEV
+NGINX_PROD="${ROOT_PROJECT}/infrastructure/nginx.prod.conf"
+export NGINX_PROD 
 # Check if the script is run as root
 
 if [ "$EUID" -eq 0 ]; then
