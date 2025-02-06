@@ -194,13 +194,15 @@ clean_dev(){
 }
 
 run_prod(){
-  auto_check_and_generate_tls
+  # auto_check_and_generate_tls
   # check_and_assign_local_host
+  IFS=',' read -r -a images_to_prune <<< "$DOCKER_IMAGE"
+  prune_docker_images "${images_to_prune[@]}"
   export DOCKER_PROD_ENTRY_CMD="pnpm i && pnpm run build && pnpm run prod:all"
   mkdir -p node_modules
   docker compose -f "${DOCKER_COMPOSE_DEV}" build --no-cache
   docker compose -f "${DOCKER_COMPOSE_PROD}" up --remove-orphans -d
-  docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app
+  # docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f mono-app
 }
 
 
