@@ -69,7 +69,11 @@ export default function TutorPage(){
             <>{currentUser ? (
                 <AppShell 
                     header={{height: 60}} 
-                    navbar={{width: 320, breakpoint: 'sm'}}
+                    navbar={{
+                        width: 320, 
+                        breakpoint: 'sm',
+                        collapsed: { mobile: !opened },
+                    }}
                     padding="md"
                 >
                     <AppShell.Header>
