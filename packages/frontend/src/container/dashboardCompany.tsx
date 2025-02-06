@@ -73,7 +73,7 @@ export function DashBoardCompany({ missions = [], formCallBack, missionCallBack,
             <IconLicense/> Create Mission
         </Button>
         <Divider />
-        <ScrollArea h={600}>
+        <ScrollArea h={550}>
             <List style={{width: "100%"}}>
                 {
                     apprentices.map((apprentice) => (

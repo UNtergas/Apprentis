@@ -77,7 +77,7 @@ export function DashBoardTutor(
               <IconLicense/> Link Apprentices
           </Button>
           <Divider />
-          <ScrollArea h={600}>
+          <ScrollArea h={550}>
               <List style={{width: "100%"}}>
                   {
                       apprentices.map((apprentice) => (
