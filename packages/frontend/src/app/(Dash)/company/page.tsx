@@ -6,8 +6,9 @@ import { MissionBlock, MissionForm } from "@/components/missionBlock";
 import { DashBoardCompany } from "@/container/dashboardCompany";
 
 import { Header } from "@/container/header";
-import { AppShell } from "@mantine/core";
+import { AppShell, Burger } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { APIException, emailValidator, MissionCreateRequest, MissionDetailed } from "@shared/frontend";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -20,7 +21,7 @@ export default function CompanyPage(){
     const [currentMission, setCurrentMission] = useState<MissionDetailed | null>(null);
     const [missions, setMissions] = useState<MissionDetailed[]>([]);
     const [loading, setLoading] = useState(false);
-
+    const [opened, { toggle }] = useDisclosure();
     
 
     // Mission Info
@@ -54,6 +55,7 @@ export default function CompanyPage(){
     const missionCallBack = (mission: MissionDetailed) => {
         setCurrentMission(mission);
         setShowInfo(true);
+        toggle();
     }
 
     const handleSubmit = async (values: MissionCreateRequest) => {
@@ -77,11 +79,18 @@ export default function CompanyPage(){
         <>{currentUser ? (
             <AppShell 
                 header={{height: 60}} 
-                navbar={{width: 320, breakpoint: 'sm'}}
+                navbar={{
+                    width: 320, 
+                    breakpoint: 'sm',
+                    collapsed: { mobile: !opened },
+                }}
                 padding="md"
             >
                 <AppShell.Header>
-                    <Header />
+                    <Header 
+                        opened={opened}
+                        toggle={toggle}
+                    />
                 </AppShell.Header>
                 <AppShell.Navbar>
                     <DashBoardCompany missions={missions} formCallBack={() => setShowForm(true)} missionCallBack={missionCallBack} role={currentUser.role} />

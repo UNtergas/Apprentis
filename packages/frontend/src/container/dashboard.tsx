@@ -73,9 +73,9 @@ export function DashBoard({ missions = [], formCallBack, missionCallBack,chartCa
           </Group>
         </div>
   
-        <ScrollArea className={classes.links}>
+        <LinksGroup icon={IconChartHistogram} label="Skill Point" initiallyOpened callback={chartCallBack} />
+        <ScrollArea h={600}>
            <LinksGroup icon={IconLicense} label="My missions" links={missionLinks} initiallyOpened />
-           <LinksGroup icon={IconChartHistogram} label="Skill Point" initiallyOpened callback={chartCallBack} />
         </ScrollArea>
       </nav>
     );

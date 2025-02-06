@@ -29,10 +29,15 @@ import { useRouter } from 'next/navigation';
 //   { link: '/community', label: 'Community' },
 // ];
 
+interface HeaderProps {
+  opened: boolean,
+  toggle: () => void,
+}
 
-export function Header() {
+export function Header(
+  {opened, toggle}: HeaderProps
+) {
   const { signOut, currentUser } = useAuth();
-  const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const router = useRouter();
 
@@ -40,16 +45,6 @@ export function Header() {
     router.push('/reset-password');
   }
 
-  // const items = links.map((link) => (
-  //   <a
-  //     key={link.label}
-  //     href={link.link}
-  //     className={classes.link}
-  //     onClick={(event) => event.preventDefault()}
-  //   >
-  //     {link.label}
-  //   </a>
-  // ));
   return (
     <header className={classes.header}>
       <div className={classes.inner}>

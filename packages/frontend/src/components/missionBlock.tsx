@@ -38,7 +38,7 @@ export function MissionBlock({ mission, onClose, reloadMissions,currentUser }: M
       <Divider my="sm" />
 
       {/* Description in Blockquote */}
-      <Blockquote m="md" color="blue" cite="-" icon={<IconTarget size={20} />} bg="gray.0">
+      <Blockquote m="md" color="blue" icon={<IconTarget size={20} />} bg="gray.0">
         {mission.description}
       </Blockquote>
 
