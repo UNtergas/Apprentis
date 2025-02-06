@@ -36,6 +36,7 @@ jobs:
             git reset --hard
             git clean -fd
             git pull origin main
+            chmod +x runner
             ./runner down
           EOF
 
