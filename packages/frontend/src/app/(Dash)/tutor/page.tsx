@@ -10,6 +10,7 @@ import ApiClient from "@/api/ApiClient";
 import { toast } from "react-toastify";
 import { MissionBlock } from "@/components/missionBlock";
 import { ApprenticeLinkForm } from "@/components/apprenticeLinkForm";
+import { useDisclosure } from "@mantine/hooks";
 export default function TutorPage(){
     const {currentUser} = useAuth();
     const [currentMission, setCurrentMission] = useState<MissionDetailed | null>(null);
@@ -17,6 +18,7 @@ export default function TutorPage(){
     const [showInfo, setShowInfo] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [opened, { toggle }] = useDisclosure();
 
     const apprenticeForm= useForm({
         initialValues:{
@@ -42,6 +44,7 @@ export default function TutorPage(){
     const missionCallBack = (mission: MissionDetailed) => {
         setCurrentMission(mission);
         setShowInfo(true);
+        toggle();
     }
 
     const handleApprenticeFormSubmit = async (values: {apprenticeEmail: string}) => {
@@ -70,7 +73,11 @@ export default function TutorPage(){
                     padding="md"
                 >
                     <AppShell.Header>
-                        <Header />
+                        <Header 
+                            hasBurger={true}
+                            opened={opened}
+                            toggle={toggle}  
+                        />
                     </AppShell.Header>
                     <AppShell.Navbar>
                         <DashBoardTutor 

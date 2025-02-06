@@ -12,33 +12,8 @@ import { ActivityCreateRequest, APIException, LEVEL, MissionDetailed, PHASE, SKI
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { mapSkillWithValidationLevel } from "@shared/frontend";
+import { useDisclosure } from "@mantine/hooks";
 
-// const LEVEL_VALUES: Record<keyof typeof LEVEL, number> = {
-//     BASIC: 1,
-//     INTERMEDIATE: 2,
-//     ADVANCED: 3,
-//     EXPERT: 4,
-// };
-
-// const mapSkillsForRadar = (validatedSkills: SkillValidationMap[]) => {
-//     // Initialize all skill types with a default level of 0
-//     const skillMap: Record<string, number> = Object.keys(SKILLTYPE).reduce((acc, key) => {
-//         acc[key] = 0;
-//         return acc;
-//     }, {} as Record<string, number>);
-
-//     // Update the map with actual validated levels
-//     validatedSkills.forEach(({ skillType, validatedLevel }) => {
-//         if (skillType in skillMap) {
-//         skillMap[skillType] = LEVEL_VALUES[validatedLevel as keyof typeof LEVEL] || 0;
-//         }
-//     });
-//     // Convert to an array for Mantine Radar Chart
-//     return Object.entries(skillMap).map(([skill, value]) => ({
-//         skill,
-//         value,
-//     }));
-// };
   
 export default function UserPage(){
     const { currentUser } = useAuth();
@@ -51,6 +26,7 @@ export default function UserPage(){
     const [loading, setLoading] = useState(false);
     // const [validatedSkills, setValidatedSkills] = useState<SkillValidationMap[]>([]);
     const [radarData, setRadarData] = useState<{ skill: string; value: number }[]>([]);
+    const [opened, { toggle }] = useDisclosure();
 
     const mapSkillToValidation = async() => {
         const validatedSkills_ = (await ApiClient.Apprentice.getApprenticeInfo()).validatedCompetencies;
@@ -138,7 +114,11 @@ export default function UserPage(){
                 padding="md"
                 >
                 <AppShell.Header>
-                    <Header />
+                    <Header 
+                        hasBurger={true}
+                        opened={opened}
+                        toggle={toggle}
+                    />
                 </AppShell.Header>
                 <AppShell.Navbar>
                     <DashBoard 

@@ -30,12 +30,13 @@ import { useRouter } from 'next/navigation';
 // ];
 
 interface HeaderProps {
-  opened: boolean,
-  toggle: () => void,
+  opened?: boolean,
+  toggle?: () => void,
+  hasBurger: boolean,
 }
 
 export function Header(
-  {opened, toggle}: HeaderProps
+  {opened, toggle, hasBurger}: HeaderProps
 ) {
   const { signOut, currentUser } = useAuth();
   const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -49,7 +50,8 @@ export function Header(
     <header className={classes.header}>
       <div className={classes.inner}>
         <Group>
-          <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
+          {hasBurger && <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />}
+          {/* <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" /> */}
           <Image src="/logo.png" alt="Logo" width={80} height={40}/>
         </Group>
 

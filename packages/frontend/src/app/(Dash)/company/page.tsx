@@ -88,6 +88,7 @@ export default function CompanyPage(){
             >
                 <AppShell.Header>
                     <Header 
+                        hasBurger={true}
                         opened={opened}
                         toggle={toggle}
                     />

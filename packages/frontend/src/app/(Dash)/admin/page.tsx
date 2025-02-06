@@ -83,7 +83,9 @@ export default function AdminPage(){
             header={{ height:20}}
         >
             <AppShell.Header>
-                <Header/>
+                <Header
+                    hasBurger={false}
+                />
             </AppShell.Header>
             <AppShell.Main pt={'xl'}>
                 <Flex direction={'column'} pt={'xl'}>
