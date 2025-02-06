@@ -1,4 +1,4 @@
-import { Group, Text, Accordion, Button, ScrollArea, Card} from "@mantine/core"
+import { Group, Text, Accordion, Button, ScrollArea, Card, SimpleGrid} from "@mantine/core"
 import { ActivityDetailed, Phase, Skill } from "@shared/frontend";
 import {  IconPencil, IconPlus } from "@tabler/icons-react"
 import { ActivityFeedback } from "./activityFeedback";
@@ -64,8 +64,10 @@ export const ActivityDisplay = (
                         <AccordionLabel title={activity.title} date={activity.date} />
                 </Accordion.Control>
                 <Accordion.Panel>
-                    <Group justify="center" grow={true} align="start">
-
+                    {/* <Group justify="center" grow={true} align="start" > */}
+                    <SimpleGrid cols ={{base: 1, md: 2}} spacing="lg">
+                        
+                    
                     <div>
 
                     
@@ -108,8 +110,9 @@ export const ActivityDisplay = (
                         activity={activity}
                         canLeaveFeedback={canLeaveFeedback}
                         triggerFeedback={triggerFeedback}
-                        />
-                    </Group>
+                    />
+                    </SimpleGrid>
+                    {/* </Group> */}
                 </Accordion.Panel>
             </Accordion.Item>
         </Accordion>
