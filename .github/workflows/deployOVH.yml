@@ -1,0 +1,51 @@
+name: Auto deploy prod to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production # Holds the SSH secrets for connecting to VPS
+
+    steps:
+      - name: Configure SSH to VPS server
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/ssh_vps_private.key
+          chmod 600 ~/.ssh/ssh_vps_private.key
+          cat >>~/.ssh/config <<END
+          Host VPS_SERVER
+            HostName $SSH_HOST
+            User $SSH_USER
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/ssh_vps_private.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_HOST: ${{ secrets.VPS_SSH_HOST }}
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          SSH_PORT: ${{ secrets.VPS_SSH_PORT }}
+          SSH_USER: ${{ secrets.VPS_SSH_USER }}
+
+      - name: SSH into server and sync the source code
+        run: |
+          ssh VPS_SERVER << EOF
+            cd ~/ProjectOption
+            git reset --hard
+            git clean -fd
+            git pull origin main
+            ./runner down
+          EOF
+
+      - name: Start backend process
+        run: |
+            ssh VPS_SERVER << EOF
+                cd ~/ProjectOption
+                ./runner prod
+            EOF
+      - name: Restart Nginx
+        run: ssh VPS_SERVER 'sudo systemctl restart nginx.service'
+    
