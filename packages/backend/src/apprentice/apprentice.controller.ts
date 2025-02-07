@@ -24,6 +24,7 @@ import {
 } from "@shared/backend";
 import { MissionService } from "#/mission/mission.service";
 import { SkillService } from "#/skill/skill.service";
+import { ApiBody } from "@nestjs/swagger";
 
 @Controller("api/apprentice")
 export class ApprenticeController {
@@ -36,6 +37,14 @@ export class ApprenticeController {
   @HttpCode(HttpStatus.OK)
   @Get("")
   @Permissions(SecurityScope.APPRENTICE_CURRENT_READ)
+  @ApiBody({
+    schema:{
+      type: "object",
+      properties:{
+        
+      }
+    }
+  })
   async getApprenticeInfo(
     @CurrentUserID() userId: number,
   ): Promise<ResponseObject<"apprentice", ApprenticeSkillMap>> {
