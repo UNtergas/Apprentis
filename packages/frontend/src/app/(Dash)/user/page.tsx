@@ -87,6 +87,7 @@ export default function UserPage(){
     const showGraphCallBack = () => {
         setShowGraph(true);
         setShowInfo(false);
+        toggle();
     }
     const showInfoCallBack = () => {
         setShowGraph(false);
