@@ -7,9 +7,7 @@
 ![postgre](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 # Apprentis
 
-> A diary for the apprentisage to track down activiy, mission and interact with INSA tutor, company.
-
-**VPS Link**: https://option.tuanworkstation.ovh/
+> A diary for the apprentisage to track down activiy, mission and interact with INSA tutor, company
 
 **Admin credentials on prod**: 
 
